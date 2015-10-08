@@ -347,13 +347,35 @@ namespace Avalon.Extension.Types
         /// <returns>
         /// A new string that is equivalent to this string except for the removed characters.
         /// </returns>
-        private static string Remove(this string value, char[] charactersToRemove)
+        public static string Remove(this string value, char[] charactersToRemove)
         {
             if (value.IsNotNullOrEmpty())
             {
                 return String.Join(string.Empty, value.Split(charactersToRemove));
             }
             return value;
+        }
+        /// <summary>
+        /// Replaces the format item in a specified string with the string representation 
+        /// of a corresponding object in a specified array. 
+        /// </summary>
+        /// <param name="value">
+        /// Value to format.
+        /// </param>
+        /// <param name="args">
+        /// An object array that contains zero or more objects to format.
+        /// </param>
+        /// <returns>
+        //  A copy of format in which the format items have been replaced by the string representation
+        //  of the corresponding objects in args.
+        /// </returns>
+        public static string Format(this string value, params object[] args)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Format(value, args);
+            }
+            return string.Empty;
         }
         #endregion "STATIC METHODS"
         #endregion "METHODS"
