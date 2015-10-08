@@ -38,7 +38,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static string LimitLength(this string value, int length)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 if (value.Length > length)
                 {
@@ -58,7 +58,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool IsAnInteger(this string value)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 int result;
                 return int.TryParse(value, out result);
@@ -76,7 +76,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool IsNumeric(this string value)
         {
-            if (!string.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 return Regex.IsMatch(value, @"^\d+$");
             }
@@ -93,7 +93,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool ISABoolean(this string value)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 bool result;
                 return bool.TryParse(value.ToLower(), out result);
@@ -111,7 +111,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static string ToEmptyStringIfNull(this string value)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 return "";
             }
@@ -128,7 +128,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static string Reverse(this string value)
         {
-            if (!String.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 char[] charValues = value.ToCharArray();
                 Array.Reverse(charValues);
@@ -147,7 +147,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool IsAllUpperCase(this string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsNullOrEmpty())
             {
                 return false;
             }
@@ -164,7 +164,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool IsAllLowerCase(this string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsNullOrEmpty())
             {
                 return false;
             }
@@ -184,7 +184,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static string ToTitleCase(this string value)
         {
-            if (!string.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
             }
@@ -201,7 +201,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static int WordCount(this string value)
         {
-            if (!string.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 return value.Split(new char[] { ' ', '.', '?' }, StringSplitOptions.RemoveEmptyEntries).Length;
             }
@@ -218,7 +218,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static bool IsNullOrEmpty(this string value)
         {
-            return string.IsNullOrEmpty(value);
+            return string.IsNullOrWhiteSpace(value);
         }
         /// <summary>
         /// Indicates whether the specified string is NOT null or NOT an System.String.Empty string.
@@ -371,7 +371,7 @@ namespace Avalon.Extension.Types
         /// </returns>
         public static string Format(this string value, params object[] args)
         {
-            if (string.IsNullOrEmpty(value))
+            if (!value.IsNullOrEmpty())
             {
                 return string.Format(value, args);
             }
