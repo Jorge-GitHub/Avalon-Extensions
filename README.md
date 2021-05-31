@@ -14,7 +14,7 @@ The following code demonstrates basic usage of Avalon-Extensions.
 ```cs
 using System;
 using Avalon.Extension.Types;
-public void SayHello()
+public void TestAvalonExtensions()
 {
     DateTime now = DateTime.Now;
     // Returns a flag that determinates whether the datetime is today or not.
