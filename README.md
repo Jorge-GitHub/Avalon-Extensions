@@ -17,9 +17,9 @@ using Avalon.Extension.Types;
 public void SayHello()
 {
     DateTime now = DateTime.Now;
-    // Will return a flag that determinates whether the datetime is today or not.
+    // Returns a flag that determinates whether the datetime is today or not.
     bool isToday = now.IsToday(); 
-    // Return the last day o the month from a provider date.
+    // Returns the last day of the month from a provider date.
     DateTime lastDayOTheMonth = now.LastDayOfMonth(); 
     // Returns a flag that determinates whether the DateTime year is a leap year or not.
     bool isLeapYear = now.IsLeapYear();
