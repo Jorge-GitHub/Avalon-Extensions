@@ -13,7 +13,7 @@ public static class EnumsListExtensions
     /// <returns>
     /// list of strings.
     /// </returns>
-    public static List<string> ToListString(this List<Enum> enums)
+    public static List<string> ToListString<T>(this List<T> enums)
     {
         if (enums.HasElements())
         {
