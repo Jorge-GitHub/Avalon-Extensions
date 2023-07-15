@@ -171,4 +171,44 @@ public static class StringConversionExtensions
 
         return value;
     }
+
+    /// <summary>
+    /// Convert a string into a DateTime object.
+    /// </summary>
+    /// <param name="value">
+    /// Value to convert.
+    /// </param>
+    /// <returns>
+    /// DateTime.
+    /// </returns>
+    public static DateTime ToDateTime(this string value)
+    {
+        return DateTime.Parse(value);
+    }
+
+    /// <summary>
+    /// Convert a string into a DateTime object.
+    /// </summary>
+    /// <param name="value">
+    /// Value to convert.
+    /// </param>
+    /// <param name="defaultValue">
+    /// Default value in case the string is an invalid date.
+    /// </param>
+    /// <returns>
+    /// DateTime.
+    /// </returns>
+    public static DateTime ToDateTime(this string value, DateTime defaultValue)
+    {
+        if(value.IsNotNullOrEmpty())
+        {
+            DateTime date;
+            if(DateTime.TryParse(value, out date))
+            {
+                return date;
+            }
+        }
+
+        return defaultValue;
+    }
 }
