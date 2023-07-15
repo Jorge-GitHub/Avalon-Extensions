@@ -125,16 +125,16 @@ public static class StringBasicExtensions
     /// </returns>
     public static string ToEmptyStringIfNull(this string value)
     {
-        if (value == null)
+        if (value.IsNotNullOrEmpty())
         {
-            return "";
+            return value;
         }
 
-        return value;
+        return string.Empty;
     }
 
     /// <summary>
-    /// Convert a null string into an empty string.
+    /// Convert a null string into an string.
     /// </summary>
     /// <param name="value">
     /// value to convert to an empty string if is null.

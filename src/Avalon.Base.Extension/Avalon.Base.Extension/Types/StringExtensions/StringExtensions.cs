@@ -72,7 +72,7 @@ public static class StringExtensions
     /// <returns>
     /// Default value if the string is null or empty. Otherwise will return the original string value.
     /// </returns>
-    public static string DefaultValueIfEmpty(this string value, string defaultValue)
+    public static string ToDefaultValueIfEmpty(this string value, string defaultValue)
     {
         return value.IsNullOrEmpty() ? defaultValue : value;
     }

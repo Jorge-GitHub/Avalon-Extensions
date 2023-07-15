@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Avalon.Base.Extension.Types;
+using System.Data;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -24,5 +25,28 @@ public static class DataTableExtensions
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Get a DataTable by table's name.
+    /// </summary>
+    /// <param name="data">
+    /// DataSet containing the DataTable.
+    /// </param>
+    /// <param name="tableName">
+    /// Table's name.
+    /// </param>
+    /// <returns>
+    /// DataTable.
+    /// </returns>
+    public static DataTable GetDataTableByNameSafe(this DataSet data, string tableName)
+    {
+        if (data.HasData() && data.Tables.Contains(tableName)
+            && tableName.IsNotNullOrEmpty())
+        {
+            return data.Tables[tableName];
+        }
+
+        return null;
     }
 }

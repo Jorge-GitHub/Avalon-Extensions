@@ -28,4 +28,23 @@ public static class ObjectConversionExtensions
 
         return Convert.ToString(value).Trim();
     }
+
+    /// <summary>
+    /// Convert a null string into an string.
+    /// </summary>
+    /// <param name="value">
+    /// value to convert to an empty string if is null.
+    /// </param>
+    /// <returns>
+    /// Empty string if the string is null.
+    /// </returns>
+    public static string ToSafeString(this object value)
+    {
+        if (value.IsNotNull())
+        {
+            return value.ToString();
+        }
+
+        return string.Empty;
+    }
 }

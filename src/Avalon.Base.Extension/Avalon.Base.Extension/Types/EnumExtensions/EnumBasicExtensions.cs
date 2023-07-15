@@ -100,5 +100,5 @@ public static class EnumBasicExtensions
         }
 
         return defaultValue;
-    }
+    }    
 }

@@ -41,6 +41,7 @@ public static class ObjectBasicExtensions
     {
         return !value.IsNull();
     }
+
     /// <summary>
     /// Copy the object.
     /// </summary>
@@ -59,11 +60,13 @@ public static class ObjectBasicExtensions
         {
             string json = JsonSerializer.Serialize(objectToCopy);
             T copy = JsonSerializer.Deserialize<T>(json);
+
             return copy;
         }
 
         return default(T);
     }
+
     /// <summary>
     /// Convert an object to a lower string if not null.
     /// </summary>
