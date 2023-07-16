@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>avalon-icon.ico</ApplicationIcon>
-    <Version>1.0.0.2</Version>
-    <PackageId>Net.AvalonTeam.Base.Extensions</PackageId>
+    <Version>1.0.0.3</Version>
+    <PackageId>net.AvalonTeam.Base.Extensions</PackageId>
     <Title>Avalon Extensions</Title>
     <Authors>Jorge Gonzalez</Authors>
     <Company>Avalon Team Inc</Company>
