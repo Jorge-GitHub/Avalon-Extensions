@@ -9,7 +9,7 @@ namespace Avalon.Base.Extension.UT;
 public class StringTest
 {
     [TestMethod]
-    public void TestSplitByChunks()
+    public void TestSplitByBlocks()
     {
         string value = "Hello World";
         List<string> values = value.SplitByBlocks(2);
