@@ -1,4 +1,6 @@
-﻿namespace Avalon.Base.Extension.Types.StringExtensions;
+﻿using System.Collections.Generic;
+
+namespace Avalon.Base.Extension.Types.StringExtensions;
 
 /// <summary>
 /// String extensions.
@@ -75,5 +77,36 @@ public static class StringExtensions
     public static string ToDefaultValueIfEmpty(this string value, string defaultValue)
     {
         return value.IsNullOrEmpty() ? defaultValue : value;
+    }
+
+    /// <summary>
+    /// Split string into chunks of strings.
+    /// </summary>
+    /// <param name="value">
+    /// Value to split.
+    /// </param>
+    /// <param name="blockSize">
+    /// Chunk size.
+    /// </param>
+    /// <returns>
+    /// The value broken into a list of strings.
+    /// </returns>
+    public static List<string> SplitByBlocks(this string value, int blockSize)
+    {
+        List<string> strings = new List<string>();
+        if (value.IsNotNullOrEmpty() && blockSize > 0)
+        {
+            int length = value.Length;
+            for (int i = 0; i < length; i += blockSize)
+            {
+                if (blockSize + i > length)
+                {
+                    blockSize = length - i;
+                }
+                strings.Add(value.Substring(i, blockSize));
+            }
+        }
+
+        return strings;
     }
 }
