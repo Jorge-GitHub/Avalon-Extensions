@@ -128,4 +128,18 @@ public static class StringExtensions
 		}
         return false;
     }
+
+	/// <summary>
+	/// Checks if a string is not a valid email or not.
+	/// </summary>
+	/// <param name="email">
+	/// Email to check.
+	/// </param>
+	/// <returns>
+	/// Flag that determinate whether a string is not a valid email or not.
+	/// </returns>
+	public static bool IsNotAValidEmail(this string email)
+	{
+		return !email.IsAValidEmail();
+	}
 }

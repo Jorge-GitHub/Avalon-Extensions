@@ -45,4 +45,11 @@ public class StringTest
         Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
 		Assert.IsFalse("jamesbond".IsAValidEmail());
 	}
+
+	[TestMethod]
+	public void TestNotValidEmail()
+	{
+		Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
+		Assert.IsTrue("jamesbond".IsNotAValidEmail());
+	}
 }
