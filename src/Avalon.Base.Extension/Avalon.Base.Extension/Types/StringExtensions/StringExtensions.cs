@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
 
@@ -108,5 +109,23 @@ public static class StringExtensions
         }
 
         return strings;
+    }
+
+	/// <summary>
+	/// Checks if a string is a valid email or not.
+	/// </summary>
+	/// <param name="email">
+	/// Email to check.
+	/// </param>
+	/// <returns>
+	/// Flag that determinate whether a string is a valid email or not.
+	/// </returns>
+	public static bool IsAValidEmail(this string email)
+    {
+        if (email.IsNotNullOrEmpty())
+        {
+			return new EmailAddressAttribute().IsValid(email);
+		}
+        return false;
     }
 }

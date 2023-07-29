@@ -38,4 +38,11 @@ public class StringTest
         test2 = "Hola Mundo";
         Assert.IsTrue(test1.NotEquals(test2, StringComparison.OrdinalIgnoreCase));
     }
+
+	[TestMethod]
+	public void TestEmail()
+    {
+        Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
+		Assert.IsFalse("jamesbond".IsAValidEmail());
+	}
 }
