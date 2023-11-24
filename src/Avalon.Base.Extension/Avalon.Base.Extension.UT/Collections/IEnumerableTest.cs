@@ -2,7 +2,7 @@
 using Avalon.Base.Extension.Types;
 using System.Text;
 
-namespace Avalon.Base.Extension.UT;
+namespace Avalon.Base.Extension.UT.Collections;
 
 /// <summary>
 /// String tests.

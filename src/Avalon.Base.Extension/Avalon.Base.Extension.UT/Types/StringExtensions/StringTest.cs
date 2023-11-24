@@ -1,7 +1,7 @@
 ﻿using Avalon.Base.Extension.Types;
 using Avalon.Base.Extension.Types.StringExtensions;
 
-namespace Avalon.Base.Extension.UT;
+namespace Avalon.Base.Extension.UT.Types.StringExtensions;
 
 /// <summary>
 /// String tests.
@@ -25,7 +25,7 @@ public class StringTest
     [TestMethod]
     public void TestNotEquals()
     {
-        string test1 = null; 
+        string test1 = null;
         string test2 = null;
         Assert.IsFalse(test1.NotEquals(test2, StringComparison.OrdinalIgnoreCase));
         test1 = string.Empty;
@@ -39,19 +39,19 @@ public class StringTest
         Assert.IsTrue(test1.NotEquals(test2, StringComparison.OrdinalIgnoreCase));
     }
 
-	[TestMethod]
-	public void TestEmail()
+    [TestMethod]
+    public void TestEmail()
     {
         Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
-		Assert.IsFalse("jamesbond".IsAValidEmail());
-	}
+        Assert.IsFalse("jamesbond".IsAValidEmail());
+    }
 
-	[TestMethod]
-	public void TestNotValidEmail()
-	{
-		Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
-		Assert.IsTrue("jamesbond".IsNotAValidEmail());
-	}
+    [TestMethod]
+    public void TestNotValidEmail()
+    {
+        Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
+        Assert.IsTrue("jamesbond".IsNotAValidEmail());
+    }
 
     /// <summary>
     /// Test RemoveBetween extension.
