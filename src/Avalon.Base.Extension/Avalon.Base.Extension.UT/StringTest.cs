@@ -62,5 +62,6 @@ public class StringTest
         string testValue = "*|FirstText|*Content To Remove*|SecondText|*";
         testValue = testValue.RemoveBetween("*|FirstText|*", "*|SecondText|*");
         Assert.IsFalse(testValue.Contains("Content To Remove"));
+        Assert.IsTrue(testValue.Contains("*|FirstText|**|SecondText|*"));
     }
 }
