@@ -52,4 +52,15 @@ public class StringTest
 		Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
 		Assert.IsTrue("jamesbond".IsNotAValidEmail());
 	}
+
+    /// <summary>
+    /// Test RemoveBetween extension.
+    /// </summary>
+    [TestMethod]
+    public void TestRemoveBetween()
+    {
+        string testValue = "*|FirstText|*Content To Remove*|SecondText|*";
+        testValue = testValue.RemoveBetween("*|FirstText|*", "*|SecondText|*");
+        Assert.IsFalse(testValue.Contains("Content To Remove"));
+    }
 }

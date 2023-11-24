@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
 
@@ -142,4 +143,36 @@ public static class StringExtensions
 	{
 		return !email.IsAValidEmail();
 	}
+
+    /// <summary>
+    /// Remove the text between two strings.
+    /// </summary>
+    /// <param name="value">
+    /// Value to replace text.
+    /// </param>
+    /// <param name="firstText">
+    /// First text or tag.
+    /// </param>
+    /// <param name="secondText">
+    /// Second text or tag.
+    /// </param>
+    /// <returns>
+    /// Text without the text within the first and second texts.
+    /// </returns>
+    public static string RemoveBetween(this string value, string firstText, string secondText)
+    {
+        if(value.IsNotNullOrEmpty()
+            && firstText.IsNotNullOrEmpty()
+            && secondText.IsNotNullOrEmpty()
+            && value.Contains(firstText)
+            && value.Contains(secondText))
+        {
+            int start = value.LastIndexOf(firstText) + firstText.Length;
+            int end = value.LastIndexOf(secondText);
+
+            return value.Remove(start, end - start);
+        }
+
+        return string.Empty;
+    }
 }
