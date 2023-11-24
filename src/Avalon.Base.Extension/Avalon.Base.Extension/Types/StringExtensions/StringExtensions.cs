@@ -150,25 +150,25 @@ public static class StringExtensions
     /// <param name="value">
     /// Value to replace text.
     /// </param>
-    /// <param name="firstText">
-    /// First text or tag.
+    /// <param name="startTag">
+    /// Start text or tag.
     /// </param>
-    /// <param name="secondText">
-    /// Second text or tag.
+    /// <param name="endTag">
+    /// End text or tag.
     /// </param>
     /// <returns>
     /// Text without the text within the first and second texts.
     /// </returns>
-    public static string RemoveBetween(this string value, string firstText, string secondText)
+    public static string RemoveBetween(this string value, string startTag, string endTag)
     {
         if(value.IsNotNullOrEmpty()
-            && firstText.IsNotNullOrEmpty()
-            && secondText.IsNotNullOrEmpty()
-            && value.Contains(firstText)
-            && value.Contains(secondText))
+            && startTag.IsNotNullOrEmpty()
+            && endTag.IsNotNullOrEmpty()
+            && value.Contains(startTag)
+            && value.Contains(endTag))
         {
-            int start = value.LastIndexOf(firstText) + firstText.Length;
-            int end = value.LastIndexOf(secondText);
+            int start = value.LastIndexOf(startTag) + startTag.Length;
+            int end = value.LastIndexOf(endTag);
 
             return value.Remove(start, end - start);
         }
