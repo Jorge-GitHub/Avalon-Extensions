@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
 
@@ -108,5 +110,71 @@ public static class StringExtensions
         }
 
         return strings;
+    }
+
+	/// <summary>
+	/// Checks if a string is a valid email or not.
+	/// </summary>
+	/// <param name="email">
+	/// Email to check.
+	/// </param>
+	/// <returns>
+	/// Flag that determinate whether a string is a valid email or not.
+	/// </returns>
+	public static bool IsAValidEmail(this string email)
+    {
+        if (email.IsNotNullOrEmpty())
+        {
+			return new EmailAddressAttribute().IsValid(email);
+		}
+        return false;
+    }
+
+	/// <summary>
+	/// Checks if a string is not a valid email or not.
+	/// </summary>
+	/// <param name="email">
+	/// Email to check.
+	/// </param>
+	/// <returns>
+	/// Flag that determinate whether a string is not a valid email or not.
+	/// </returns>
+	public static bool IsNotAValidEmail(this string email)
+	{
+		return !email.IsAValidEmail();
+	}
+
+    /// <summary>
+    /// Remove the text between two strings.
+    /// </summary>
+    /// <param name="value">
+    /// Value to replace text.
+    /// </param>
+    /// <param name="startTag">
+    /// Start text or tag.
+    /// </param>
+    /// <param name="endTag">
+    /// End text or tag.
+    /// </param>
+    /// <returns>
+    /// Text without the text within the first and second texts.
+    /// </returns>
+    public static string RemoveBetweenTags(this string value, string startTag, string endTag)
+    {
+        if(value.IsNotNullOrEmpty()
+            && startTag.IsNotNullOrEmpty()
+            && endTag.IsNotNullOrEmpty()
+            && value.Contains(startTag)
+            && value.Contains(endTag))
+        {
+            int start = value.LastIndexOf(startTag) + startTag.Length;
+            int end = value.LastIndexOf(endTag);
+            if (start > 0 && end > 0)
+            {
+                return value.Remove(start, end - start);
+            }
+        }
+
+        return string.Empty;
     }
 }

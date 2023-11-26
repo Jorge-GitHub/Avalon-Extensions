@@ -1,7 +1,7 @@
 using Avalon.Base.Extension.Types;
 using Avalon.Base.Extension.Types.DateTimeExtensions;
 
-namespace Avalon.Base.Extension.UT;
+namespace Avalon.Base.Extension.UT.Types.DateTimeExtensions;
 
 /// <summary>
 /// Date time extensions.

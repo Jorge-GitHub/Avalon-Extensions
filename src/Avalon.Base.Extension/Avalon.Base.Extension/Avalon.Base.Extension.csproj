@@ -20,7 +20,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Extensions;String Extensions; DateTime Extensions;Integer Extensions;list Extensions;Decimal Extensions;Enum Extensions;Double Extensions;Collection Extensions;DataSet Extensions;; Data Extensions</PackageTags>
     <PackageReleaseNotes>I love C# extensions. This is a library that contains some of the extensions I wrote during my career for my personal projects. I hope more people will join and add more extensions that we can share.</PackageReleaseNotes>
-    <AssemblyName>Avalon Extension</AssemblyName>
+    <AssemblyName>Avalon.Base.Extension</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 

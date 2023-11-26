@@ -9,6 +9,28 @@ namespace Avalon.Base.Extension.Types;
 public static class StringBasicExtensions
 {
     /// <summary>
+    /// Determines whether two strings do not match.
+    /// </summary>
+    /// <param name="value">
+    /// Value to compare.
+    /// </param>
+    /// <param name="valueToCompare">
+    /// Other value to  compare.
+    /// </param>
+    /// <returns>
+    /// Flag that determines whether two strings do not match.
+    /// </returns>
+    public static bool NotEquals(this string value, 
+        string valueToCompare, StringComparison comparisonType)
+    {
+        if (value.IsNotNullOrEmpty() && valueToCompare.IsNotNullOrEmpty())
+        {
+            return !value.Equals(valueToCompare, comparisonType);
+        }
+        return value != valueToCompare;
+    }
+
+    /// <summary>
     /// Limit the size of the string.
     /// </summary>
     /// <param name="value">
