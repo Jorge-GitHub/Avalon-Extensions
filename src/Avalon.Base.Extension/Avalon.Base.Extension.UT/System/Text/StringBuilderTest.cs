@@ -11,13 +11,13 @@ namespace Avalon.Base.Extension.UT.System.Text;
 public class StringBuilderTest
 {
     /// <summary>
-    /// Test RemoveBetween extension.
+    /// Test RemoveBetweenTags extension.
     /// </summary>
     [TestMethod]
-    public void TestRemoveBetween()
+    public void TestRemoveBetweenTags()
     {
         StringBuilder testValue = new StringBuilder("*|FirstText|*Content To Remove*|SecondText|*");
-        testValue.RemoveBetween("*|FirstText|*", "*|SecondText|*");
+        testValue.RemoveBetweenTags("*|FirstText|*", "*|SecondText|*");
         Assert.IsFalse(testValue.ToString().Contains("Content To Remove"));
         Assert.IsTrue(testValue.ToString().Contains("*|FirstText|**|SecondText|*"));
     }

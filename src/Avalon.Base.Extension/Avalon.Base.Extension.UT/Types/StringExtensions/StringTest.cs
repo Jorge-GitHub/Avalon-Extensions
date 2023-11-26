@@ -54,13 +54,13 @@ public class StringTest
     }
 
     /// <summary>
-    /// Test RemoveBetween extension.
+    /// Test RemoveBetweenTags extension.
     /// </summary>
     [TestMethod]
-    public void TestRemoveBetween()
+    public void TestRemoveBetweenTags()
     {
         string testValue = "*|FirstText|*Content To Remove*|SecondText|*";
-        testValue = testValue.RemoveBetween("*|FirstText|*", "*|SecondText|*");
+        testValue = testValue.RemoveBetweenTags("*|FirstText|*", "*|SecondText|*");
         Assert.IsFalse(testValue.Contains("Content To Remove"));
         Assert.IsTrue(testValue.Contains("*|FirstText|**|SecondText|*"));
     }

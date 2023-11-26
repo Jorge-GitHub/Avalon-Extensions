@@ -20,15 +20,17 @@ public static class StringBuilderExtensions
     /// <param name="endTag">
     /// End text or tag.
     /// </param>
-    public static void RemoveBetween(this StringBuilder builder, 
+    public static void RemoveBetweenTags(this StringBuilder builder, 
         string startTag, string endTag)
     {
         if (builder.IsNotNull())
         {
             int start = builder.LastIndexOf(startTag) + startTag.Length;
             int end = builder.LastIndexOf(endTag);
-
-            builder.Remove(start, end - start);
+            if (start > 0 && end > 0)
+            {
+                builder.Remove(start, end - start);
+            }
         }
     }
 

@@ -159,7 +159,7 @@ public static class StringExtensions
     /// <returns>
     /// Text without the text within the first and second texts.
     /// </returns>
-    public static string RemoveBetween(this string value, string startTag, string endTag)
+    public static string RemoveBetweenTags(this string value, string startTag, string endTag)
     {
         if(value.IsNotNullOrEmpty()
             && startTag.IsNotNullOrEmpty()
@@ -169,8 +169,10 @@ public static class StringExtensions
         {
             int start = value.LastIndexOf(startTag) + startTag.Length;
             int end = value.LastIndexOf(endTag);
-
-            return value.Remove(start, end - start);
+            if (start > 0 && end > 0)
+            {
+                return value.Remove(start, end - start);
+            }
         }
 
         return string.Empty;
