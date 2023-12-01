@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -43,6 +44,25 @@ public static class ObjectConversionExtensions
         if (value.IsNotNull())
         {
             return value.ToString();
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// Serialize an object into JSON format.
+    /// </summary>
+    /// <param name="value">
+    /// Object to serialize.
+    /// </param>
+    /// <returns>
+    /// Object in JSON format.
+    /// </returns>
+    public static string ToJSON(this object value)
+    {
+        if (value.IsNotNull())
+        {
+            return JsonSerializer.Serialize(value);
         }
 
         return string.Empty;
