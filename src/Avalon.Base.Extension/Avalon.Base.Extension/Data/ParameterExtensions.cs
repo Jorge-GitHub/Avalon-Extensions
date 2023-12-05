@@ -38,4 +38,23 @@ public static class ParameterExtensions
     {
         parameter.Value = @parameter.Value;
     }
+
+    /// <summary>
+    /// Returns a DBNull value if the string is empty.
+    /// </summary>
+    /// <param name="value">
+    /// Value to verify.
+    /// </param>
+    /// <returns>
+    /// DBNull value if the string is empty.
+    /// </returns>
+    public static object ToDBNullIfEmpty(this string value)
+    {
+        if(value.IsNull())
+        {
+            return DBNull.Value;
+        }
+
+        return value;
+    }
 }
