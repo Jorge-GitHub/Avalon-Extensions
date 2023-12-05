@@ -44,7 +44,7 @@ The below code will remove any SQL injection on a list of parameters.
     }
 ```
 
-### Check if the email is valid or not.
+### Check if the Email is Valid or Not.
 
 the below code checks if a string is a valid email or not.
 
