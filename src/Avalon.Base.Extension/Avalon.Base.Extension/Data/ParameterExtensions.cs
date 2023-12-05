@@ -22,8 +22,20 @@ public static class ParameterExtensions
         {
             foreach (SqlParameter parameter in parameters)
             {
-                parameter.Value = @parameter.Value;
+                parameter.ToSafeSQL();
             }
         }
+    }
+
+    /// <summary>
+    /// Cleans the  parameters for especial 
+    /// characters, to avoid SQL injection.
+    /// </summary>
+    /// <param name="parameter">
+    /// Store procedure parameter.
+    /// </param>
+    public static void ToSafeSQL(this SqlParameter parameter)
+    {
+        parameter.Value = @parameter.Value;
     }
 }
