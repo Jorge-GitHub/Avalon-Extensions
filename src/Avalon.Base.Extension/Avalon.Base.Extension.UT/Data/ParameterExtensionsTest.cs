@@ -13,7 +13,7 @@ public class ParameterExtensionsTest
     /// Test the ToSafeSQL extension.
     /// </summary>
     [TestMethod]
-    public void ToSafeSQLTest()
+    public void TestToSafeSQL()
     {
         List<SqlParameter> parameters = new List<SqlParameter>();
         parameters.Add(new SqlParameter("@Paramater1", -1));
