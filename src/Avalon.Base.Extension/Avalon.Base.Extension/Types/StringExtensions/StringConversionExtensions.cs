@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
 
