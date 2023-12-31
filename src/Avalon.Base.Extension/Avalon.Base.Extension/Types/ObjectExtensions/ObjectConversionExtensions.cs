@@ -67,4 +67,44 @@ public static class ObjectConversionExtensions
 
         return string.Empty;
     }
+
+    /// <summary>
+    /// Map an object to its DTO version.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToMap">
+    /// Object to map.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T Map<T>(this object objectToMap)
+    {
+        if (objectToMap.IsNotNull())
+        {
+            return JsonSerializer.Deserialize<T>(
+                JsonSerializer.Serialize(objectToMap));
+        }
+
+        return default(T);
+    }
+
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToDTO">
+    /// Object to map.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T ToDTO<T>(this object objectToDTO)
+    {
+        return objectToDTO.Map<T>();
+    }
 }
