@@ -212,4 +212,21 @@ public static class StringConversionExtensions
 
         return defaultValue;
     }
+
+    /// <summary>
+    /// Convert a string into json.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to convert to.
+    /// </typeparam>
+    /// <param name="json">
+    /// Object in JSON format.
+    /// </param>
+    /// <returns>
+    /// Object from the json string.
+    /// </returns>
+    public static T ToObject<T>(this string json)
+    {
+        return JsonSerializer.Deserialize<T>(json);
+    }
 }

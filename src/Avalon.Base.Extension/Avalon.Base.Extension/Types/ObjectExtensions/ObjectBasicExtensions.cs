@@ -58,10 +58,8 @@ public static class ObjectBasicExtensions
     {
         if (objectToCopy.IsNotNull())
         {
-            string json = JsonSerializer.Serialize(objectToCopy);
-            T copy = JsonSerializer.Deserialize<T>(json);
-
-            return copy;
+            return JsonSerializer.Deserialize<T>(
+                JsonSerializer.Serialize(objectToCopy));
         }
 
         return default(T);

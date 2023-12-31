@@ -84,8 +84,7 @@ public static class ObjectConversionExtensions
     {
         if (objectToMap.IsNotNull())
         {
-            return JsonSerializer.Deserialize<T>(
-                JsonSerializer.Serialize(objectToMap));
+            return JsonSerializer.Deserialize<T>(objectToMap.ToJSON());
         }
 
         return default(T);
