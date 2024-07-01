@@ -49,4 +49,24 @@ public static class DataTableExtensions
 
         return null;
     }
+
+    /// <summary>
+    /// Get total number of records on the data table.
+    /// </summary>
+    /// <param name="dataSet">
+    /// Dataset.
+    /// </param>
+    /// <returns>
+    /// Total number of records on the data table.
+    /// </returns>
+    public static int GetNumberOfRowsOnTable(DataSet dataSet, string tableName)
+    {
+        DataTable data = dataSet.GetDataTableByNameSafe(tableName);
+        if (data.HasData())
+        {
+            return data.Rows[0][0].ToSafeString().ToInteger(0);
+        }
+
+        return 0;
+    }
 }
