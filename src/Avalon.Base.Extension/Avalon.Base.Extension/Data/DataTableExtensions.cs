@@ -59,7 +59,7 @@ public static class DataTableExtensions
     /// <returns>
     /// Total number of records on the data table.
     /// </returns>
-    public static int GetNumberOfRowsOnTable(DataSet dataSet, string tableName)
+    public static int GetNumberOfRowsOnTable(this DataSet dataSet, string tableName)
     {
         DataTable data = dataSet.GetDataTableByNameSafe(tableName);
         if (data.HasData())
