@@ -43,18 +43,6 @@ public static class DataRowExtensions
                 {
                     row.ImportData(row.Table.Columns[property.Name],
                         property, objectToImport);
-                    //if (property.PropertyType.Module.Name.Equals("mscorlib.dll"))
-                    //{
-                    //    if (property.GetValue(objectToImport, null) == null)
-                    //    {
-                    //        row[property.Name] = DBNull.Value;
-                    //    }
-                    //    else
-                    //    {
-                    //        DataColumn column = row.Table.Columns[property.Name];
-                    //        row[property.Name] = property.GetValue(objectToImport, null).ToSafeString();
-                    //    }
-                    //}
                 }
             }
         }
@@ -109,10 +97,6 @@ public static class DataRowExtensions
                 {
                     row[column] = int.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(DateTime)))
-                {
-                    row[column] = DateTime.Parse(value.ToSafeString());
-                }
                 else if (type.Equals(typeof(bool)))
                 {
                     row[column] = bool.Parse(value.ToSafeString());
@@ -125,9 +109,17 @@ public static class DataRowExtensions
                 {
                     row[column] = decimal.Parse(value.ToSafeString());
                 }
+                else if (type.Equals(typeof(DateTime)))
+                {
+                    row[column] = DateTime.Parse(value.ToSafeString());
+                }
                 else if (type.Equals(typeof(DateTimeOffset)))
                 {
                     row[column] = DateTimeOffset.Parse(value.ToSafeString());
+                }
+                else if (type.Equals(typeof(TimeSpan)))
+                {
+                    row[column] = TimeSpan.Parse(value.ToSafeString());
                 }
                 else if (type.Equals(typeof(float)))
                 {
