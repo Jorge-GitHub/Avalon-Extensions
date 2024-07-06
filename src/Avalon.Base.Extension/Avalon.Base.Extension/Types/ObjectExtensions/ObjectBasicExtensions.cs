@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
