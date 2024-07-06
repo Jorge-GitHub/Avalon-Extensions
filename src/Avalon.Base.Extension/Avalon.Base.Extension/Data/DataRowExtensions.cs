@@ -84,45 +84,45 @@ public static class DataRowExtensions
             }
             else
             {
-                Type type = column.DataType;
-                if (type.Equals(typeof(string)))
+                Type columnType = column.DataType;
+                if (columnType.Equals(typeof(string)))
                 {
                     row[column] = value.ToSafeString();
                 }
-                else if (type.Equals(typeof(int))
-                    || type.Equals(typeof(Int64)))
+                else if (columnType.Equals(typeof(int))
+                    || columnType.Equals(typeof(Int64)))
                 {
                     row[column] = int.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(bool)))
+                else if (columnType.Equals(typeof(bool)))
                 {
                     row[column] = bool.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(double)))
+                else if (columnType.Equals(typeof(double)))
                 {
                     row[column] = double.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(decimal)))
+                else if (columnType.Equals(typeof(decimal)))
                 {
                     row[column] = decimal.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(DateTime)))
+                else if (columnType.Equals(typeof(DateTime)))
                 {
                     row[column] = DateTime.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(DateTimeOffset)))
+                else if (columnType.Equals(typeof(DateTimeOffset)))
                 {
                     row[column] = DateTimeOffset.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(TimeSpan)))
+                else if (columnType.Equals(typeof(TimeSpan)))
                 {
                     row[column] = TimeSpan.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(float)))
+                else if (columnType.Equals(typeof(float)))
                 {
                     row[column] = float.Parse(value.ToSafeString());
                 }
-                else if (type.Equals(typeof(long)))
+                else if (columnType.Equals(typeof(long)))
                 {
                     row[column] = long.Parse(value.ToSafeString());
                 }
