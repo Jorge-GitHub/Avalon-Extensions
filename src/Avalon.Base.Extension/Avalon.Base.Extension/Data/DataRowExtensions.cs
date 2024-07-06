@@ -37,13 +37,10 @@ public static class DataRowExtensions
         PropertyInfo[] properties = objectToImport.GetType().GetProperties();
         foreach (PropertyInfo property in properties)
         {
-            if (property.PropertyType.IsPublic)
+            if (property.PropertyType.IsPublic && property.CanRead)
             {
-                if (property.CanRead)
-                {
-                    row.ImportData(row.Table.Columns[property.Name],
-                        property, objectToImport);
-                }
+                row.ImportData(row.Table.Columns[property.Name],
+                    property, objectToImport);
             }
         }
     }
