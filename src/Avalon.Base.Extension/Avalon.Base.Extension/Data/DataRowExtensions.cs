@@ -39,8 +39,11 @@ public static class DataRowExtensions
         {
             if (property.PropertyType.IsPublic && property.CanRead)
             {
-                row.ImportData(row.Table.Columns[property.Name],
-                    property, objectToImport);
+                if (row.Table.Columns.Contains(property.Name))
+                {
+                    row.ImportData(row.Table.Columns[property.Name],
+                        property, objectToImport);
+                }
             }
         }
     }
@@ -64,69 +67,72 @@ public static class DataRowExtensions
     public static void ImportData(this DataRow row,
         DataColumn column, PropertyInfo property, object objectToImport)
     {
-        object value = property.GetValue(objectToImport, null);
-        if (value.IsNull())
+        if (row[column] != null)
         {
-            row[column] = DBNull.Value;
-        }
-        else
-        {
-            if (property.PropertyType.IsEnum)
+            object value = property.GetValue(objectToImport, null);
+            if (value.IsNull())
             {
-                if (row[column].ToString().IsNumeric())
-                {
-                    row[column] = int.Parse(value.ToSafeString());
-                }
-                else
-                {
-                    row[column] = value.ToSafeString();
-                }
+                row[column] = DBNull.Value;
             }
             else
             {
-                Type columnType = column.DataType;
-                if (columnType.Equals(typeof(string)))
+                if (property.PropertyType.IsEnum)
                 {
-                    row[column] = value.ToSafeString();
+                    if (row[column].ToString().IsNumeric())
+                    {
+                        row[column] = int.Parse(value.ToSafeString());
+                    }
+                    else
+                    {
+                        row[column] = value.ToSafeString();
+                    }
                 }
-                else if (columnType.Equals(typeof(int))
-                    || columnType.Equals(typeof(Int64)))
+                else
                 {
-                    row[column] = int.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(bool)))
-                {
-                    row[column] = bool.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(double)))
-                {
-                    row[column] = double.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(decimal)))
-                {
-                    row[column] = decimal.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(DateTime)))
-                {
-                    row[column] = DateTime.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(DateTimeOffset)))
-                {
-                    row[column] = DateTimeOffset.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(TimeSpan)))
-                {
-                    row[column] = TimeSpan.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(float)))
-                {
-                    row[column] = float.Parse(value.ToSafeString());
-                }
-                else if (columnType.Equals(typeof(long)))
-                {
-                    row[column] = long.Parse(value.ToSafeString());
+                    Type columnType = column.DataType;
+                    if (columnType.Equals(typeof(string)))
+                    {
+                        row[column] = value.ToSafeString();
+                    }
+                    else if (columnType.Equals(typeof(int))
+                        || columnType.Equals(typeof(Int64)))
+                    {
+                        row[column] = int.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(bool)))
+                    {
+                        row[column] = bool.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(double)))
+                    {
+                        row[column] = double.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(decimal)))
+                    {
+                        row[column] = decimal.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(DateTime)))
+                    {
+                        row[column] = DateTime.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(DateTimeOffset)))
+                    {
+                        row[column] = DateTimeOffset.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(TimeSpan)))
+                    {
+                        row[column] = TimeSpan.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(float)))
+                    {
+                        row[column] = float.Parse(value.ToSafeString());
+                    }
+                    else if (columnType.Equals(typeof(long)))
+                    {
+                        row[column] = long.Parse(value.ToSafeString());
+                    }
                 }
             }
-        }        
+        }
     }
 }
