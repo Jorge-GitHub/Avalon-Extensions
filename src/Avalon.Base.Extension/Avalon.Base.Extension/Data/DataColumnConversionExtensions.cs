@@ -3,7 +3,10 @@ using System.Data;
 
 namespace Avalon.Base.Extension.Data;
 
-public static class DataColumnExtensions
+/// <summary>
+/// Data column conversion extensions.
+/// </summary>
+public static class DataColumnConversionExtensions
 {
     /// <summary>
     /// Get the column's value and if the value is null it will returns an empty string.
@@ -17,10 +20,11 @@ public static class DataColumnExtensions
     /// <returns>
     /// Data column value as a string.
     /// </returns>
-    public static string DataColumnToSafeString(this DataColumn column, DataRow row)
+    public static string DataColumnToSafeString(this DataRow row, string columnName)
     {
-        if (row != null && row[column] != null && row[column] != DBNull.Value) {
-            return row[column].ToSafeString();
+        if (row != null && row[columnName] != null && row[columnName] != DBNull.Value)
+        {
+            return row[columnName].ToSafeString();
         }
 
         return string.Empty;
@@ -38,9 +42,9 @@ public static class DataColumnExtensions
     /// <returns>
     /// Data column value as an integer.
     /// </returns>
-    public static int DataColumnToSafeInteger(this DataColumn column, 
-        DataRow row, int defaultValue = 0)
+    public static int DataColumnToSafeInteger(this DataRow row,
+        string columnName, int defaultValue = 0)
     {
-        return column.DataColumnToSafeString(row).ToInteger(defaultValue);
+        return row.DataColumnToSafeString(columnName).ToInteger(defaultValue);
     }
 }
