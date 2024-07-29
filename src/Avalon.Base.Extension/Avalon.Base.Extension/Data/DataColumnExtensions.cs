@@ -17,7 +17,7 @@ public static class DataColumnExtensions
     /// <returns>
     /// Data column value as a string.
     /// </returns>
-    public static string ToSafeString(this DataColumn column, DataRow row)
+    public static string DataColumnToSafeString(this DataColumn column, DataRow row)
     {
         if (row != null && row[column] != null && row[column] != DBNull.Value) {
             return row[column].ToSafeString();
@@ -38,9 +38,9 @@ public static class DataColumnExtensions
     /// <returns>
     /// Data column value as an integer.
     /// </returns>
-    public static int ToSafeInteger(this DataColumn column, 
+    public static int DataColumnToSafeInteger(this DataColumn column, 
         DataRow row, int defaultValue = 0)
     {
-        return column.ToSafeString(row).ToInteger(defaultValue);
+        return column.DataColumnToSafeString(row).ToInteger(defaultValue);
     }
 }
