@@ -1,8 +1,8 @@
-﻿using Avalon.Base.Extension.Internal.Helpers.Data;
+﻿using Avalon.Base.Extension.Collections;
+using Avalon.Base.Extension.Internal.Helpers.Data;
 using Avalon.Base.Extension.Types;
 using System.Data;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -25,6 +25,32 @@ public static class DataRowExtensions
     public static bool HasRecords(this DataRowCollection rows)
     {
         return rows != null && rows.Count > 0;
+    }
+
+    /// <summary>
+    /// Convert a data row list into objects.
+    /// </summary>
+    /// <typeparam name="T">
+    ///  Object type to convert into.
+    /// </typeparam>
+    /// <param name="rows">
+    /// Rows to convert to.
+    /// </param>
+    /// <returns>
+    /// List of objects.
+    /// </returns>
+    public static List<T> ToObjects<T>(this List<DataRow> rows)
+    {
+        var list = new List<T>();
+        if(rows.HasElements())
+        {
+            foreach(DataRow row in rows)
+            {
+                list.Add(row.ToObject<T>());
+            }
+        }
+
+        return list;
     }
 
     /// <summary>
