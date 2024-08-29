@@ -24,6 +24,26 @@ public static class DataRowExtensions
     }
 
     /// <summary>
+    /// Convert a data row into an object.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object type to convert into.
+    /// </typeparam>
+    /// <param name="row">
+    /// Data row to convert.
+    /// </param>
+    /// <returns>
+    /// Object from the data row.
+    /// </returns>
+    public static T ToObject<T>(this DataRow row)
+    {
+        var objectToConvert = (T)Activator.CreateInstance(typeof(T));
+        row.ImportData(objectToConvert);
+
+        return objectToConvert;
+    }
+
+    /// <summary>
     /// Import the object data into the data row.
     /// </summary>
     /// <param name="row">
