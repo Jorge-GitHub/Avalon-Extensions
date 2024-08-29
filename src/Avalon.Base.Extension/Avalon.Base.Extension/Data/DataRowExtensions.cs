@@ -2,6 +2,7 @@
 using Avalon.Base.Extension.Types;
 using System.Data;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -10,6 +11,8 @@ namespace Avalon.Base.Extension.Data;
 /// </summary>
 public static class DataRowExtensions
 {
+    private static DataRowSerialization DataRowHelper = new DataRowSerialization();
+
     /// <summary>
     /// Check if a DataRow collections has records or not.
     /// </summary>
@@ -39,7 +42,7 @@ public static class DataRowExtensions
     public static T ToObject<T>(this DataRow row)
     {
         var objectToConvert = (T)Activator.CreateInstance(typeof(T));
-        new DataRowSerialization().LoadObjectFromRow(row, objectToConvert);
+        DataRowHelper.LoadObjectFromRow(row, objectToConvert);
 
         return objectToConvert;
     }
