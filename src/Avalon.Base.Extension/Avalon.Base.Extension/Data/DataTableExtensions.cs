@@ -24,5 +24,31 @@ public static class DataTableExtensions
         }
 
         return false;
-    } 
+    }
+
+    /// <summary>
+    /// Convert a data table rows into a list of objects.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object type to convert into.
+    /// </typeparam>
+    /// <param name="table">
+    /// DataTable containing the data to convert from.
+    /// </param>
+    /// <returns>
+    /// List of Objects that were populated with the DataTable.
+    /// </returns>
+    public static List<T> ToObjects<T>(this DataTable table)
+    {
+        List<T> objects = new List<T>();
+        if (table.HasData())
+        {
+            foreach (DataRow row in table.Rows)
+            {
+                objects.Add(row.ToObject<T>());
+            }
+        }
+
+        return objects;
+    }
 }
