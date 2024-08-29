@@ -21,4 +21,16 @@ public class ParameterExtensionsTest
         parameters.ToSafeSQL();
         Assert.IsTrue(parameters.Count == 2);
     }
+
+    /// <summary>
+    /// Test the ToDBNullIfEmpty extension.
+    /// </summary>
+    [TestMethod]
+    public void TestToDBNullIfEmpty()
+    {
+        string testValidString = "valid string";
+        string invalidString = null;
+        Assert.IsTrue(testValidString.ToDBNullIfEmpty().Equals(testValidString));
+        Assert.IsTrue(invalidString.ToDBNullIfEmpty().Equals(DBNull.Value));
+    }
 }

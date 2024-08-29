@@ -1,5 +1,4 @@
-﻿using Avalon.Base.Extension.Types;
-using System.Data;
+﻿using System.Data;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -28,25 +27,28 @@ public static class DataTableExtensions
     }
 
     /// <summary>
-    /// Get a DataTable by table's name.
+    /// Convert a data table rows into a list of objects.
     /// </summary>
-    /// <param name="data">
-    /// DataSet containing the DataTable.
-    /// </param>
-    /// <param name="tableName">
-    /// Table's name.
+    /// <typeparam name="T">
+    /// Object type to convert into.
+    /// </typeparam>
+    /// <param name="table">
+    /// DataTable containing the data to convert from.
     /// </param>
     /// <returns>
-    /// DataTable.
+    /// List of Objects that were populated with the DataTable.
     /// </returns>
-    public static DataTable GetDataTableByNameSafe(this DataSet data, string tableName)
+    public static List<T> ToObjects<T>(this DataTable table)
     {
-        if (data.HasData() && data.Tables.Contains(tableName)
-            && tableName.IsNotNullOrEmpty())
+        List<T> objects = new List<T>();
+        if (table.HasData())
         {
-            return data.Tables[tableName];
+            foreach (DataRow row in table.Rows)
+            {
+                objects.Add(row.ToObject<T>());
+            }
         }
 
-        return null;
+        return objects;
     }
 }

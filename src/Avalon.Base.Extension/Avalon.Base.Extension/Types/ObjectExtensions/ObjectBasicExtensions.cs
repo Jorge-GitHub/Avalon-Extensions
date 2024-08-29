@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
@@ -58,10 +57,8 @@ public static class ObjectBasicExtensions
     {
         if (objectToCopy.IsNotNull())
         {
-            string json = JsonSerializer.Serialize(objectToCopy);
-            T copy = JsonSerializer.Deserialize<T>(json);
-
-            return copy;
+            return JsonSerializer.Deserialize<T>(
+                JsonSerializer.Serialize(objectToCopy));
         }
 
         return default(T);
