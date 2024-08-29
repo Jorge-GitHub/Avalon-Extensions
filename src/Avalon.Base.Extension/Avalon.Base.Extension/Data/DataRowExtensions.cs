@@ -1,4 +1,5 @@
-﻿using Avalon.Base.Extension.Types;
+﻿using Avalon.Base.Extension.Internal.Helpers.Data;
+using Avalon.Base.Extension.Types;
 using System.Data;
 using System.Reflection;
 
@@ -38,7 +39,7 @@ public static class DataRowExtensions
     public static T ToObject<T>(this DataRow row)
     {
         var objectToConvert = (T)Activator.CreateInstance(typeof(T));
-        row.ImportData(objectToConvert);
+        new DataRowSerialization().LoadObjectFromRow(row, objectToConvert);
 
         return objectToConvert;
     }
