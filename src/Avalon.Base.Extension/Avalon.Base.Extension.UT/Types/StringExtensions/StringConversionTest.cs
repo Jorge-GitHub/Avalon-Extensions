@@ -19,4 +19,14 @@ public class StringConversionTest
         User user = testValue.ToObject<User>();
         Assert.IsTrue(user.Name.IsNotNullOrEmpty());
     }
+
+    /// <summary>
+    /// Test to object safe extension.
+    /// </summary>
+    [TestMethod]
+    public void TestToObjectSafe()
+    {
+        User user = "random".ToObjectSafe<User>();
+        Assert.IsTrue(user.IsNull());
+    }
 }

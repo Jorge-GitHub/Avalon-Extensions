@@ -225,8 +225,39 @@ public static class StringConversionExtensions
     /// <returns>
     /// Object from the json string.
     /// </returns>
-    public static T ToObject<T>(this string json)
+    public static T ToObject<T>(this string json) where T : class
     {
-        return JsonSerializer.Deserialize<T>(json);
+        if (json.IsNotNullOrEmpty())
+        {
+            return JsonSerializer.Deserialize<T>(json);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Convert a string into json in a safe way.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to convert to.
+    /// </typeparam>
+    /// <param name="json">
+    /// Object in JSON format.
+    /// </param>
+    /// <returns>
+    /// Object from the json string.
+    /// </returns>
+    public static T ToObjectSafe<T>(this string json) where T : class
+    {
+        try
+        {
+            if (json.IsNotNullOrEmpty())
+            {
+                return json.ToObject<T>();
+            }
+        }
+        catch { }
+
+        return null;
     }
 }
