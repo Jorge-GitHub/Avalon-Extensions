@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
@@ -176,5 +177,24 @@ public static class StringExtensions
         }
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Extension method that sanitizes the given string by replacing all non-alphanumeric characters
+    /// (including spaces) with a specified replacement string. The default replacement is an empty string, 
+    /// which effectively removes the special characters.
+    /// </summary>
+    /// <param name="value">The string to be sanitized.</param>
+    /// <param name="replacement">The string to replace all non-alphanumeric characters with. 
+    /// The default is an empty string, which removes the special characters.</param>
+    /// <returns>A sanitized string where all non-alphanumeric characters and spaces are replaced with the specified replacement string.</returns>
+    public static string Sanitize(this string value, string replacement = "")
+    {
+        if (value.IsNotNullOrEmpty())
+        {
+            return Regex.Replace(value, @"[^a-zA-Z0-9]", replacement);
+        }
+
+        return value;
     }
 }

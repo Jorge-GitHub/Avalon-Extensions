@@ -64,4 +64,15 @@ public class StringTest
         Assert.IsFalse(testValue.Contains("Content To Remove"));
         Assert.IsTrue(testValue.Contains("*|FirstText|**|SecondText|*"));
     }
+
+    /// <summary>
+    /// Test Sanitize extension.
+    /// </summary>
+    [TestMethod]
+    public void TestSanitize()
+    {
+        string value = "Hello@";
+        string cleanValue = value.Sanitize();
+        Assert.IsTrue(cleanValue.Equals("Hello"));
+    }
 }
