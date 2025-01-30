@@ -28,6 +28,28 @@ public static class DataRowExtensions
     }
 
     /// <summary>
+    /// Converts a <see cref="DataRowCollection"/> to a <see cref="List{DataRow}"/>.
+    /// </summary>
+    /// <param name="rowCollection">The collection of <see cref="DataRow"/> to be converted.</param>
+    /// <returns>
+    /// A <see cref="List{DataRow}"/> containing all the rows from the <paramref name="rowCollection"/>.
+    /// If the collection is empty or null, an empty <see cref="List{DataRow}"/> is returned.
+    /// </returns>
+    /// <remarks>
+    /// This method uses LINQ to cast the <see cref="DataRowCollection"/> into a <see cref="List{DataRow}"/>
+    /// if the collection contains records. Otherwise, it returns an empty list.
+    /// </remarks>
+    public static List<DataRow> ToRows(this DataRowCollection rowCollection)
+    {
+        if (rowCollection.HasRecords())
+        {
+            return rowCollection.Cast<DataRow>().ToList();
+        }
+
+        return new List<DataRow>();
+    }
+
+    /// <summary>
     /// Convert a data row list into objects.
     /// </summary>
     /// <typeparam name="T">
