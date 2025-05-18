@@ -142,13 +142,22 @@ public static class StringBasicExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// A boolean flag that determines whether to remove line breaks (`\r` and `\n`).
+    /// If set to <c>true</c>, line breaks are removed from the string. If set to <c>false</c> (default), no modification is made to line breaks.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToEmptyStringIfNull(this string value)
+    public static string ToEmptyStringIfNull(this string value, bool removeBreaks = false)
     {
         if (value.IsNotNullOrEmpty())
         {
+            if (removeBreaks)
+            {
+                value = value.Replace("\r", "").Replace("\n", "");
+            }
+
             return value;
         }
 
@@ -161,12 +170,16 @@ public static class StringBasicExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// A boolean flag that determines whether to remove line breaks (`\r` and `\n`).
+    /// If set to <c>true</c>, line breaks are removed from the string. If set to <c>false</c> (default), no modification is made to line breaks.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToSafeString(this string value)
+    public static string ToSafeString(this string value, bool removeBreaks = false)
     {
-        return value.ToEmptyStringIfNull();
+        return value.ToEmptyStringIfNull(removeBreaks);
     }
 
     /// <summary>

@@ -38,10 +38,15 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToSafeString(this object value)
+    public static string ToSafeString(this object value, bool removeBreaks = false)
     {
         if (value.IsNotNull())
         {
+            if (removeBreaks)
+            {
+                return value.ToString().Replace("\r", "").Replace("\n", "");
+            }
+
             return value.ToString();
         }
 
