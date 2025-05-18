@@ -183,6 +183,17 @@ public static class StringBasicExtensions
     }
 
     /// <summary>
+    /// Safely trims a string and optionally removes line breaks.
+    /// </summary>
+    /// <param name="value">The input string to be trimmed.</param>
+    /// <param name="removeBreaks">If true, removes line breaks from the string.</param>
+    /// <returns>A trimmed string with optional line breaks removed. Returns an empty string if the input is null.</returns>
+    public static string ToSafeTrim(this string value, bool removeBreaks = false)
+    {
+        return value.ToSafeString(removeBreaks);
+    }
+
+    /// <summary>
     /// Reverse the string.
     /// </summary>
     /// <param name="value">
