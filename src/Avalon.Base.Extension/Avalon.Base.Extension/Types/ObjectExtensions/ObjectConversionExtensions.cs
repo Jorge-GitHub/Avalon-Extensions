@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -59,13 +60,24 @@ public static class ObjectConversionExtensions
     /// <param name="value">
     /// Object to serialize.
     /// </param>
+    /// <param name="ignoreNull">Determinate whether to ignore null values when serializing.</param>
     /// <returns>
     /// Object in JSON format.
     /// </returns>
-    public static string ToJSON(this object value)
+    public static string ToJSON(this object value, 
+        bool ignoreNull = true)
     {
         if (value.IsNotNull())
         {
+            if (ignoreNull)
+            {
+                return JsonSerializer.Serialize(value,
+                    new JsonSerializerOptions 
+                    { 
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull 
+                    });
+            }
+
             return JsonSerializer.Serialize(value);
         }
 
