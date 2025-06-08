@@ -1,6 +1,6 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -225,11 +225,17 @@ public static class StringConversionExtensions
     /// <returns>
     /// Object from the json string.
     /// </returns>
-    public static T ToObject<T>(this string json) where T : class
+    public static T ToObject<T>(this string json,
+        bool propertyNameCaseInsensitive = true) where T : class
     {
         if (json.IsNotNullOrEmpty())
         {
-            return JsonSerializer.Deserialize<T>(json);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = propertyNameCaseInsensitive
+            };
+
+            return JsonSerializer.Deserialize<T>(json, options);
         }
 
         return null;
