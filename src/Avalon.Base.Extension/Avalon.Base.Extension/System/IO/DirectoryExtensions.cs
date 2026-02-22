@@ -36,4 +36,19 @@ public static class DirectoryExtensions
             new DirectoryInfo(directoryPath).Empty();
         }
     }
+
+    public static string ResolveFolderPath(this string folder)
+    {
+        if (string.IsNullOrWhiteSpace(folder))
+        {
+            return AppContext.BaseDirectory;
+        }
+
+        if (Path.IsPathRooted(folder))
+        {
+            return folder;
+        }
+
+        return Path.Combine(AppContext.BaseDirectory, folder);
+    }
 }
