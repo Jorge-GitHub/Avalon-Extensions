@@ -51,4 +51,14 @@ public static class DataTableExtensions
 
         return objects;
     }
+
+    public static T ToObjectFromFirstUserFromDataTable<T>(this DataTable table)
+    {
+        if (table.HasData())
+        {
+            return table.Rows[0].ToObject<T>();
+        }
+
+        return default;
+    }
 }

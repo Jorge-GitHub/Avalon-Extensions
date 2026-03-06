@@ -152,9 +152,19 @@ public static class DataSetExtensions
         List<T> objects = new List<T>();
         if (data.HasData())
         {
-            return data.Tables[0].ToObjects<List<T>>().ToList() as List<T>;
+            return data.Tables[0].ToObjects<T>().ToList();
         }
 
         return objects;
+    }
+
+    public static T ToObjectFromFirstUserFromDataSet<T>(this DataSet data)
+    {
+        if (data.HasData())
+        {
+            return data.Tables[0].ToObjectFromFirstUserFromDataTable<T>();
+        }
+
+        return default;
     }
 }
