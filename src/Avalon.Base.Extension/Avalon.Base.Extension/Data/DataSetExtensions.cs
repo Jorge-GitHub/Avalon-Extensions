@@ -103,6 +103,16 @@ public static class DataSetExtensions
         return string.Empty;
     }
 
+    public static string GetFirstValueOnTheFirstTable(this DataSet dataSet)
+    {
+        if (dataSet.HasData())
+        {
+            return dataSet.Tables[0].Rows[0][0].ToSafeString();
+        }
+
+        return string.Empty;
+    }
+
     /// <summary>
     /// Get the first value on the first data table.
     /// Similar to calling data.Rows[0][0].
