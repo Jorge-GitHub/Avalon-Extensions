@@ -43,4 +43,8 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\OpenSource\&quot; /Y" />
+  </Target>
+
 </Project>

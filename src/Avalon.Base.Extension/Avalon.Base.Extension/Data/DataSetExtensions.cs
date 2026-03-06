@@ -146,4 +146,15 @@ public static class DataSetExtensions
 
         return 0;
     }
+
+    public static List<T> ToObjects<T>(this DataSet data)
+    {
+        List<T> objects = new List<T>();
+        if (data.HasData())
+        {
+            return data.Tables[0].ToObjects<List<T>>().ToList() as List<T>;
+        }
+
+        return objects;
+    }
 }
