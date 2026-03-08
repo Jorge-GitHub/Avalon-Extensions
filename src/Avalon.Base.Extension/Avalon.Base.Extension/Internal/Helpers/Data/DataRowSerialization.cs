@@ -22,8 +22,9 @@ internal class DataRowSerialization
         {
             if (row[column] != DBNull.Value)
             {
-                PropertyInfo property = objectToMap.GetType()
-                    .GetProperty(column.ColumnName);
+                PropertyInfo property = this.GetPropertyForColumn(
+                    objectToMap.GetType(),
+                    column.ColumnName);
                 if (property != null)
                 {
                     if (property.CanWrite)
@@ -34,6 +35,50 @@ internal class DataRowSerialization
                 }
             }
         }
+    }
+
+    private PropertyInfo GetPropertyForColumn(Type objectType, string columnName)
+    {
+        PropertyInfo property = objectType.GetProperty(
+            columnName,
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+
+        if (property != null)
+        {
+            return property;
+        }
+
+        string normalizedColumnName = this.NormalizeName(columnName);
+        PropertyInfo[] properties = objectType.GetProperties(
+            BindingFlags.Instance | BindingFlags.Public);
+
+        foreach (PropertyInfo currentProperty in properties)
+        {
+            if (this.NormalizeName(currentProperty.Name).Equals(
+                normalizedColumnName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return currentProperty;
+            }
+        }
+
+        return null;
+    }
+
+    private string NormalizeName(string value)
+    {
+        StringBuilder result = new StringBuilder();
+        foreach (char character in value)
+        {
+            if (character != '_' &&
+                character != '-' &&
+                character != ' ')
+            {
+                result.Append(character);
+            }
+        }
+
+        return result.ToString();
     }
 
     /// <summary>
