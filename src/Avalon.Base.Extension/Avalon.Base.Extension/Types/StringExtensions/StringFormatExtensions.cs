@@ -25,7 +25,7 @@ public static class StringFormatExtensions
         return value;
     }
 
-    public static string ToPhoneNumber(string phoneNumber)
+    public static string ToPhoneNumber(this string phoneNumber)
     {
         phoneNumber = phoneNumber.ToDigits()!;
 
