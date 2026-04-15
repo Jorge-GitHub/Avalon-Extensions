@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -115,6 +114,16 @@ public static class StringConversionExtensions
         if (value.IsADecimal())
         {
             return decimal.Parse(value);
+        }
+
+        return defaultValue;
+    }
+
+    public static long ToLong(this string value, long defaultValue = 0)
+    {
+        if (long.TryParse(value, out long result))
+        {
+            return result;
         }
 
         return defaultValue;

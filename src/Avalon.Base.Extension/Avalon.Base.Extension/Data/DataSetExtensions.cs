@@ -114,7 +114,8 @@ public static class DataSetExtensions
         return string.Empty;
     }
 
-    public static bool GetFirstValueOnTheFirstTableAsBoolean(this DataSet dataSet)
+    public static bool GetFirstValueOnTheFirstTableAsBoolean(this DataSet dataSet,
+        bool defaultValue = false)
     {
         string value = dataSet.GetFirstValueOnTheFirstTable();
         if (bool.TryParse(value, out bool result))
@@ -122,8 +123,13 @@ public static class DataSetExtensions
             return result;
         }
 
-        return value.Equals("1", StringComparison.OrdinalIgnoreCase)
-            || value.Equals("t", StringComparison.OrdinalIgnoreCase);
+        if(value.Equals("1", StringComparison.OrdinalIgnoreCase)
+            || value.Equals("t", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return value.ToBoolean(defaultValue);
     }
 
     public static long GetFirstValueOnTheFirstTableAsLong(this DataSet dataSet,
