@@ -1,5 +1,6 @@
 ﻿using Avalon.Base.Extension.Types;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -111,6 +112,30 @@ public static class DataSetExtensions
         }
 
         return string.Empty;
+    }
+
+    public static bool GetFirstValueOnTheFirstTableAsBoolean(this DataSet dataSet)
+    {
+        string value = dataSet.GetFirstValueOnTheFirstTable();
+        if (bool.TryParse(value, out bool result))
+        {
+            return result;
+        }
+
+        return value.Equals("1", StringComparison.OrdinalIgnoreCase)
+            || value.Equals("t", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static long GetFirstValueOnTheFirstTableAsLong(this DataSet dataSet,
+        long defaultValue = 0)
+    {
+        string value = dataSet.GetFirstValueOnTheFirstTable();
+        if (long.TryParse(value, out long result))
+        {
+            return result;
+        }
+
+        return defaultValue;
     }
 
     /// <summary>
