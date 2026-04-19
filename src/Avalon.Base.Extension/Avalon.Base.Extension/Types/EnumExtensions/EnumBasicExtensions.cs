@@ -100,5 +100,13 @@ public static class EnumBasicExtensions
         }
 
         return defaultValue;
-    }    
+    }
+
+    public static TEnum OrDefaultIfUndefined<TEnum>(
+        this TEnum value,
+        TEnum defaultValue)
+        where TEnum : struct, Enum
+    {
+        return Enum.IsDefined(value) ? value : defaultValue;
+    }
 }
