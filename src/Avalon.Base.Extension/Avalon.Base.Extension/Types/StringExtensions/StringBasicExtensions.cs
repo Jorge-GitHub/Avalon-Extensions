@@ -93,6 +93,7 @@ public static class StringBasicExtensions
 
             return decimal.TryParse(value, out result);
         }
+
         return false;
     }
 

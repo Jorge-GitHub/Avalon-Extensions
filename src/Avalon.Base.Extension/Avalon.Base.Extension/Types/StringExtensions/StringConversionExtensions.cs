@@ -109,11 +109,18 @@ public static class StringConversionExtensions
     /// <returns>
     /// String as a decimal.
     /// </returns>
-    public static decimal ToDecimal(this string value, decimal defaultValue)
+    public static decimal ToDecimal(this string value, decimal defaultValue = 0m)
     {
         if (value.IsADecimal())
         {
-            return decimal.Parse(value);
+            if (decimal.TryParse(
+                value,
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out decimal result))
+            {
+                return result;
+            }
         }
 
         return defaultValue;
@@ -157,7 +164,7 @@ public static class StringConversionExtensions
             }
         }
 
-        return value.RemoveNoneNumericValues().ToDecimal(0).ToString(format, culture);
+        return value.RemoveNoneNumericValues().ToDecimal().ToString(format, culture);
     }
 
     /// <summary>
