@@ -153,18 +153,14 @@ public static class StringConversionExtensions
     /// <returns>
     /// String as formated as a currency.
     /// </returns>
-    public static string FormatToCurrency(this string value, string format = "C2", 
-        CultureInfo culture = null)
+    public static string FormatToCurrency(this string value, string format = "C2",
+        CultureInfo? culture = null)
     {
-        if (value.IsNotNullOrEmpty())
-        {
-            if (culture == null)
-            {
-                culture = CultureInfo.CurrentCulture;
-            }
-        }
+        culture ??= CultureInfo.CurrentCulture;
 
-        return value.RemoveNoneNumericValues().ToDecimal().ToString(format, culture);
+        return value.RemoveNoneNumericValues()
+            .ToDecimal()
+            .ToString(format, culture);
     }
 
     /// <summary>

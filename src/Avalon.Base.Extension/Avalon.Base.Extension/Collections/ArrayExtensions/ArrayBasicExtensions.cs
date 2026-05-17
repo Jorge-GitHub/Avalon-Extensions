@@ -109,7 +109,7 @@ public static class ArrayBasicExtensions
     /// </returns>
     public static string Join(this Array values)
     {
-        return values.Join(null);
+        return values.Join("");
     }
 
     /// <summary>
