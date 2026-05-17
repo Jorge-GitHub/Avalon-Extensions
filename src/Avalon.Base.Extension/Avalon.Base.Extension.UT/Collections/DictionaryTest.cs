@@ -53,7 +53,7 @@ public class DictionaryTest
         dictionarySource["UniqueSourceElement"] = new[] { "Unique source element." };
         dictionarySource["DuplicateElement"] = new[] { "Duplicate element." };
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
            dictionaryTarget.AddRange(
             dictionarySource, updateValue: false, throwExceptionOnDuplicate: true));
     }
