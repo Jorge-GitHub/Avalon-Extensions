@@ -26,6 +26,6 @@ public class DateTimeOffsetTest
         DateTimeOffset DateTimeOffsetToTestAgainst = dateTimeOffsetToTest.FirstDayOfMonth();
         Assert.AreEqual(dateTimeOffsetToTest.Year, DateTimeOffsetToTestAgainst.Year);
         Assert.AreEqual(dateTimeOffsetToTest.Month, DateTimeOffsetToTestAgainst.Month);
-        Assert.AreEqual(DateTimeOffsetToTestAgainst.Day, 1);
+        Assert.AreEqual(1, DateTimeOffsetToTestAgainst.Day);
     }
 }
