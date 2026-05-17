@@ -90,11 +90,32 @@ public static class ObjectConversionExtensions
         return string.Empty;
     }
 
+    /// <summary>
+    /// Serialize an object into JSON format ignoring null values.
+    /// </summary>
+    /// <param name="value">
+    /// Object to serialize.
+    /// </param>
+    /// <returns>
+    /// Object in JSON format.
+    /// </returns>
     public static string ToJSON(this object value)
     {
         return value.ToJSON(ignoreNull: true);
     }
 
+    /// <summary>
+    /// Serialize an object into JSON format using the specified serializer options.
+    /// </summary>
+    /// <param name="value">
+    /// Object to serialize.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object in JSON format.
+    /// </returns>
     public static string ToJSON(this object value,
         JsonSerializerOptions options)
     {
