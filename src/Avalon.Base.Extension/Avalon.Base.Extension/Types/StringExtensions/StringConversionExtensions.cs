@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Microsoft.SqlServer.Server;
+using System.Globalization;
 using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
@@ -146,6 +147,25 @@ public static class StringConversionExtensions
     /// Currency format.
     /// Default is "C2".
     /// </param>
+    /// <returns>
+    /// String as formated as a currency.
+    /// </returns>
+    public static string FormatToCurrency(this string value, 
+        string format = "C2")
+    {
+        return value.FormatToCurrency(format, CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// Format the string into the a currency.
+    /// </summary>
+    /// <param name="value">
+    /// Value to format.
+    /// </param>
+    /// <param name="format">
+    /// Currency format.
+    /// Default is "C2".
+    /// </param>
     /// <param name="culture">
     /// Culture to format.
     /// Default is current culture.
@@ -153,10 +173,13 @@ public static class StringConversionExtensions
     /// <returns>
     /// String as formated as a currency.
     /// </returns>
-    public static string FormatToCurrency(this string value, string format = "C2",
-        CultureInfo? culture = null)
+    public static string FormatToCurrency(this string value, 
+        string? format, CultureInfo culture)
     {
-        culture ??= CultureInfo.CurrentCulture;
+        if(format!.IsNullOrEmpty())
+        {
+            format = "C2";
+        }
 
         return value.RemoveNoneNumericValues()
             .ToDecimal()

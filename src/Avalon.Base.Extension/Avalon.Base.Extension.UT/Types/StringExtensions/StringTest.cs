@@ -15,11 +15,11 @@ public class StringTest
         string value = "Hello World";
         List<string> values = value.SplitByBlocks(2);
         int lenght = value.SplitByBlocks(2).Count;
-        Assert.AreEqual(lenght, 6);
+        Assert.AreEqual(6, lenght);
         lenght = string.Empty.SplitByBlocks(2).Count;
-        Assert.AreEqual(lenght, 0);
+        Assert.AreEqual(0, lenght);
         lenght = value.SplitByBlocks(4).Count;
-        Assert.AreEqual(lenght, 3);
+        Assert.AreEqual(3, lenght);
     }
 
     [TestMethod]
