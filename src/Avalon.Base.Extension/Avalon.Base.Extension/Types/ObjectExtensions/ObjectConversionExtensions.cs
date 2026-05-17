@@ -165,7 +165,7 @@ public static class ObjectConversionExtensions
         if (objectToMap is not null)
         {
             return JsonSerializer.Deserialize<T>(
-                objectToMap!.ToJSON(options), options);
+                objectToMap.ToJSON(options), options);
         }
 
         return default;
