@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\OpenSource\&quot; /Y" />
+    <Exec Command="xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\OpenSource\&quot; /Y&#xD;&#xA;xcopy &quot;C:\Repos\OpenSource\Avalon-Extensions\Ai\specs\*&quot; &quot;C:\Repos\Libraries\specs\docs\OpenSource\Avalon.Base.Extension\&quot; /E /I /Y" />
   </Target>
 
 </Project>
