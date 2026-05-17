@@ -8,6 +8,12 @@ namespace Avalon.Base.Extension.Types;
 /// </summary>
 public static class ObjectConversionExtensions
 {
+    private static readonly JsonSerializerOptions MapJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     /// <summary>
     /// Convert an object into a string.
     /// </summary>
@@ -84,6 +90,22 @@ public static class ObjectConversionExtensions
         return string.Empty;
     }
 
+    public static string ToJSON(this object value)
+    {
+        return value.ToJSON(ignoreNull: true);
+    }
+
+    public static string ToJSON(this object value,
+        JsonSerializerOptions options)
+    {
+        if (value.IsNotNull())
+        {
+            return JsonSerializer.Serialize(value, options);
+        }
+
+        return string.Empty;
+    }
+
     /// <summary>
     /// Map an object to its DTO version.
     /// </summary>
@@ -96,14 +118,36 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in its DTO version.
     /// </returns>
-    public static T Map<T>(this object objectToMap)
+    public static T? Map<T>(this object? objectToMap)
     {
-        if (objectToMap.IsNotNull())
+        return objectToMap.Map<T>(MapJsonOptions);
+    }
+
+    /// <summary>
+    /// Map an object to its DTO version.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToMap">
+    /// Object to map.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T? Map<T>(this object? objectToMap,
+        JsonSerializerOptions options)
+    {
+        if (objectToMap!.IsNotNull())
         {
-            return JsonSerializer.Deserialize<T>(objectToMap.ToJSON());
+            return JsonSerializer.Deserialize<T>(
+                objectToMap!.ToJSON(options), options);
         }
 
-        return default(T);
+        return default;
     }
 
     /// <summary>
@@ -118,8 +162,29 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in its DTO version.
     /// </returns>
-    public static T ToDTO<T>(this object objectToDTO)
+    public static T? ToDTO<T>(this object? objectToDTO)
     {
-        return objectToDTO.Map<T>();
+        return objectToDTO.Map<T>(MapJsonOptions);
+    }
+
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToDTO">
+    /// Object to map.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T? ToDTO<T>(this object? objectToDTO,
+        JsonSerializerOptions options)
+    {
+        return objectToDTO.Map<T>(options);
     }
 }
