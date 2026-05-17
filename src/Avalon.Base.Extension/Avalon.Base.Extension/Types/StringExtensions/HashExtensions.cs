@@ -34,14 +34,14 @@ public static class HashExtensions
     /// <returns>
     /// Value to hashed.
     /// </returns>
-    public static string ToSHA1(this string value, Encoding encode)
+    public static string ToSHA1(this string value, Encoding? encode)
     {
         if (encode == null)
         {
             encode = Encoding.Default;
         }
         byte[] buffer = encode.GetBytes(value);
-        SHA1CryptoServiceProvider cryptoTransformSHA1 = new SHA1CryptoServiceProvider();
+        using SHA1 cryptoTransformSHA1 = SHA1.Create();
 
         return BitConverter.ToString(cryptoTransformSHA1.ComputeHash(buffer)).Replace("-", "");
     }
