@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Avalon.Base.Extension.Types.ObjectExtensions;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -8,12 +9,6 @@ namespace Avalon.Base.Extension.Types;
 /// </summary>
 public static class ObjectConversionExtensions
 {
-    private static readonly JsonSerializerOptions MapJsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-
     /// <summary>
     /// Convert an object into a string.
     /// </summary>
@@ -125,51 +120,7 @@ public static class ObjectConversionExtensions
         }
 
         return string.Empty;
-    }
-
-    /// <summary>
-    /// Map an object to its DTO version.
-    /// </summary>
-    /// <typeparam name="T">
-    /// Object to return.
-    /// </typeparam>
-    /// <param name="objectToMap">
-    /// Object to map.
-    /// </param>
-    /// <returns>
-    /// Object in its DTO version.
-    /// </returns>
-    public static T? Map<T>(this object? objectToMap)
-    {
-        return objectToMap.Map<T>(MapJsonOptions);
-    }
-
-    /// <summary>
-    /// Map an object to its DTO version.
-    /// </summary>
-    /// <typeparam name="T">
-    /// Object to return.
-    /// </typeparam>
-    /// <param name="objectToMap">
-    /// Object to map.
-    /// </param>
-    /// <param name="options">
-    /// Serializer options.
-    /// </param>
-    /// <returns>
-    /// Object in its DTO version.
-    /// </returns>
-    public static T? Map<T>(this object? objectToMap,
-        JsonSerializerOptions options)
-    {
-        if (objectToMap is not null)
-        {
-            return JsonSerializer.Deserialize<T>(
-                objectToMap.ToJSON(options), options);
-        }
-
-        return default;
-    }
+    } 
 
     /// <summary>
     /// Sugar coding for mapping an object to its DTO version.
@@ -185,7 +136,7 @@ public static class ObjectConversionExtensions
     /// </returns>
     public static T? ToDTO<T>(this object? objectToDTO)
     {
-        return objectToDTO.Map<T>(MapJsonOptions);
+        return objectToDTO.Map<T>();
     }
 
     /// <summary>
