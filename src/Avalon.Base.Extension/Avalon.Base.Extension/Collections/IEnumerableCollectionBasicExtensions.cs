@@ -1,4 +1,5 @@
 ﻿using Avalon.Base.Extension.Types;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Avalon.Base.Extension.Collections;
@@ -17,9 +18,11 @@ public static class IEnumerableCollectionBasicExtensions
     /// <returns>
     /// Flag that determinate whether the list has elements or not.
     /// </returns>
-    public static bool HasElements<T>(this IEnumerable<T> list)
+    public static bool HasElements<T>([NotNullWhen(true)] this IEnumerable<T>? list)
     {
-        return (list != null && list.Any());
+        return list is ICollection<T> collection
+            ? collection.Count > 0
+            : list != null && list.Any();
     }
 
     /// <summary>
@@ -31,7 +34,7 @@ public static class IEnumerableCollectionBasicExtensions
     /// <returns>
     /// Flag that determinate whether the list is empty or null.
     /// </returns>
-    public static bool IsNullOrEmpty<T>(this IEnumerable<T> list)
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T>? list)
     {
         return !list.HasElements();
     }
@@ -94,9 +97,22 @@ public static class IEnumerableCollectionBasicExtensions
     /// <param name="action">
     /// Delegate to perform on each element.
     /// </param>
-    public static void Span<T>(this IEnumerable<T> list, Action<T> action)
+    public static void Span<T>(this IEnumerable<T>? list, Action<T>? action)
     {
-        list.ToList().Span(action);
+        if (action is not null)
+        {
+            if (list is List<T> items)
+            {
+                items.Span(action);
+            }
+            else if (list is not null)
+            {
+                foreach (T element in list)
+                {
+                    action(element);
+                }
+            }
+        }
     }
 
     /// <summary>

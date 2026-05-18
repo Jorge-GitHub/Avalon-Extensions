@@ -35,6 +35,25 @@ public static class ListCollectionBasicExtensions
     }
 
     /// <summary>
+    /// Expose the list items as a span.
+    /// </summary>
+    /// <typeparam name="T">
+    /// List type.
+    /// </typeparam>
+    /// <param name="list">
+    /// List to expose as a span.
+    /// </param>
+    /// <returns>
+    /// Span of the list items.
+    /// </returns>
+    public static global::System.Span<T> AsSpan<T>(this List<T>? list)
+    {
+        return list.HasElements()
+            ? CollectionsMarshal.AsSpan(list)
+            : global::System.Span<T>.Empty;
+    }
+
+    /// <summary>
     /// Span a list of items.
     /// </summary>
     /// <typeparam name="T">
@@ -46,13 +65,13 @@ public static class ListCollectionBasicExtensions
     /// <param name="action">
     /// Delegate to perform on each element.
     /// </param>
-    public static void Span<T>(this List<T> list, Action<T> action)
+    public static void Span<T>(this List<T>? list, Action<T>? action)
     {
-        if (list.HasElements())
+        if (list.HasElements() && action is not null)
         {
-            Span<T> items = CollectionsMarshal.AsSpan(list);
+            global::System.Span<T> items = list.AsSpan();
             int numberOfItems = items.Length;
-            for(int i =0; i < numberOfItems; i++)
+            for (int i = 0; i < numberOfItems; i++)
             {
                 action(items[i]);
             }
