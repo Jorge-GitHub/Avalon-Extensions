@@ -16,10 +16,10 @@ public static class ListCollectionBasicExtensions
     /// <param name="items">
     /// Items to randomize.
     /// </param>
-    public static List<T> Randomize<T>(this List<T> items)
+    public static List<T> Randomize<T>(this List<T>? items)
     {
         List<T> randomList = new List<T>();
-        if (items.HasElements())
+        if (items?.Count > 0)
         {
             Random r = new Random();
             int randomIndex = 0;
@@ -48,7 +48,7 @@ public static class ListCollectionBasicExtensions
     /// </returns>
     public static global::System.Span<T> AsSpan<T>(this List<T>? list)
     {
-        return list.HasElements()
+        return list is { Count: > 0 }
             ? CollectionsMarshal.AsSpan(list)
             : global::System.Span<T>.Empty;
     }
@@ -67,7 +67,7 @@ public static class ListCollectionBasicExtensions
     /// </param>
     public static void Span<T>(this List<T>? list, Action<T>? action)
     {
-        if (list.HasElements() && action is not null)
+        if (list?.Count > 0 && action is not null)
         {
             global::System.Span<T> items = list.AsSpan();
             int numberOfItems = items.Length;
