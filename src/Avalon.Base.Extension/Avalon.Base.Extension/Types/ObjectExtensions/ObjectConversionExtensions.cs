@@ -139,6 +139,11 @@ public static class ObjectConversionExtensions
         return objectToDTO.Map<T>();
     }
 
+    public static T? ToDTOUsingJson<T>(this object? objectToDTO)
+    {
+        return objectToDTO.MapUsingJson<T>();
+    }
+
     /// <summary>
     /// Sugar coding for mapping an object to its DTO version.
     /// </summary>

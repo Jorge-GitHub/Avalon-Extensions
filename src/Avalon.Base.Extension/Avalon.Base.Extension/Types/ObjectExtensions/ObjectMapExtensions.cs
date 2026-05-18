@@ -11,6 +11,11 @@ public static class ObjectMapExtensions
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
+    public static T? MapUsingJson<T>(this object? objectToMap)
+    {
+        return objectToMap.Map<T>(MapJsonOptions);
+    }
+
     /// <summary>
     /// Map an object to its DTO version.
     /// </summary>
