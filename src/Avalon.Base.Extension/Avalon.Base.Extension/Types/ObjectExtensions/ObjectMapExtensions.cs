@@ -37,7 +37,7 @@ public static class ObjectMapExtensions
         if (objectToMap is not null)
         {
             return JsonSerializer.Deserialize<T>(
-                objectToMap.ToJSON(options), options);
+                objectToMap.ToJson(options), options);
         }
 
         return default;

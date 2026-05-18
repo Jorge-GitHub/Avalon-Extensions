@@ -65,7 +65,7 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in JSON format.
     /// </returns>
-    public static string ToJSON(this object value, 
+    public static string ToJson(this object value, 
         bool ignoreNull = true)
     {
         if (value.IsNotNull())
@@ -94,9 +94,9 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in JSON format.
     /// </returns>
-    public static string ToJSON(this object value)
+    public static string ToJson(this object value)
     {
-        return value.ToJSON(ignoreNull: true);
+        return value.ToJson(ignoreNull: true);
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in JSON format.
     /// </returns>
-    public static string ToJSON(this object value,
+    public static string ToJson(this object value,
         JsonSerializerOptions options)
     {
         if (value.IsNotNull())
@@ -134,12 +134,12 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in its DTO version.
     /// </returns>
-    public static T? ToDTO<T>(this object? objectToDTO)
+    public static T? ToDto<T>(this object? objectToDTO)
     {
         return objectToDTO.Map<T>();
     }
 
-    public static T? ToDTOUsingJson<T>(this object? objectToDTO)
+    public static T? ToDtoUsingJson<T>(this object? objectToDTO)
     {
         return objectToDTO.MapUsingJson<T>();
     }
@@ -159,7 +159,7 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in its DTO version.
     /// </returns>
-    public static T? ToDTO<T>(this object? objectToDTO,
+    public static T? ToDto<T>(this object? objectToDTO,
         JsonSerializerOptions options)
     {
         return objectToDTO.Map<T>(options);
