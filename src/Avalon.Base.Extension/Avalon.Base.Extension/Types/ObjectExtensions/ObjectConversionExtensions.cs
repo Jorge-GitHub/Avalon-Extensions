@@ -37,6 +37,9 @@ public static class ObjectConversionExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// Flag that determines whether to remove line breaks from the string.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
@@ -123,7 +126,7 @@ public static class ObjectConversionExtensions
     } 
 
     /// <summary>
-    /// Sugar coding for mapping an object to its DTO version.
+    /// Sugar coding for mapping an object to its DTO version using a cached compiled property mapper.
     /// </summary>
     /// <typeparam name="T">
     /// Object to return.
@@ -139,13 +142,25 @@ public static class ObjectConversionExtensions
         return objectToDTO.Map<T>();
     }
 
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version using JSON serialization.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToDTO">
+    /// Object to map.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
     public static T? ToDtoUsingJson<T>(this object? objectToDTO)
     {
         return objectToDTO.MapUsingJson<T>();
     }
 
     /// <summary>
-    /// Sugar coding for mapping an object to its DTO version.
+    /// Sugar coding for mapping an object to its DTO version using JSON serialization and the specified serializer options.
     /// </summary>
     /// <typeparam name="T">
     /// Object to return.

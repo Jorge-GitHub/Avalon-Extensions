@@ -6,6 +6,9 @@ using System.Text.Json.Serialization;
 
 namespace Avalon.Base.Extension.Types.ObjectExtensions;
 
+/// <summary>
+/// Object mapping extension methods.
+/// </summary>
 public static class ObjectMapExtensions
 {
     private static readonly ConcurrentDictionary<(Type SourceType, Type TargetType), Delegate> MapCache = new();
@@ -16,13 +19,25 @@ public static class ObjectMapExtensions
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
+    /// <summary>
+    /// Map an object to its DTO version using JSON serialization.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToMap">
+    /// Object to map.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
     public static T? MapUsingJson<T>(this object? objectToMap)
     {
         return objectToMap.Map<T>(MapJsonOptions);
     }
 
     /// <summary>
-    /// Map an object to its DTO version.
+    /// Map an object to its DTO version using JSON serialization and the specified serializer options.
     /// </summary>
     /// <typeparam name="T">
     /// Object to return.
@@ -49,7 +64,7 @@ public static class ObjectMapExtensions
     }
 
     /// <summary>
-    /// Map an object to its DTO version.
+    /// Map an object to its DTO version using a cached compiled property mapper.
     /// </summary>
     /// <typeparam name="T">
     /// Object to return.
@@ -74,6 +89,24 @@ public static class ObjectMapExtensions
         return default;
     }
 
+    /// <summary>
+    /// Create a compiled mapper function for the specified source and target types.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="sourceType">
+    /// Source object type.
+    /// </param>
+    /// <param name="targetType">
+    /// Target object type.
+    /// </param>
+    /// <returns>
+    /// Compiled mapper function.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the target type is a reference type without a public parameterless constructor.
+    /// </exception>
     private static Func<object, T> CreateMapper<T>(Type sourceType, Type targetType)
     {
         ParameterExpression sourceParameter = Expression.Parameter(typeof(object), "source");
@@ -107,6 +140,21 @@ public static class ObjectMapExtensions
             sourceParameter).Compile();
     }
 
+    /// <summary>
+    /// Create member bindings for compatible source and target properties.
+    /// </summary>
+    /// <param name="sourceType">
+    /// Source object type.
+    /// </param>
+    /// <param name="targetType">
+    /// Target object type.
+    /// </param>
+    /// <param name="typedSource">
+    /// Expression that represents the source object converted to its runtime type.
+    /// </param>
+    /// <returns>
+    /// Member bindings for all compatible mapped properties.
+    /// </returns>
     private static MemberBinding[] CreatePropertyBindings(
         Type sourceType,
         Type targetType,
