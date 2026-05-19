@@ -277,6 +277,32 @@ public static class StringConversionExtensions
     }
 
     /// <summary>
+    /// Convert a JSON string into an object using the specified serializer options.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to convert to.
+    /// </typeparam>
+    /// <param name="json">
+    /// Object in JSON format.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object from the json string.
+    /// </returns>
+    public static T? ToObject<T>(this string json,
+        JsonSerializerOptions options) where T : class
+    {
+        if (json.IsNotNullOrEmpty())
+        {
+            return JsonSerializer.Deserialize<T>(json, options);
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Convert a string into json in a safe way.
     /// </summary>
     /// <typeparam name="T">
