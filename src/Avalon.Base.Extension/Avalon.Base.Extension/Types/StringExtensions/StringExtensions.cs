@@ -195,4 +195,20 @@ public static class StringExtensions
 
         return value;
     }
+
+    public static string NormalizeValue(this string? value,
+        string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
+            ? value!.Trim().ToLowerInvariant()
+            : defaultValue;
+    }
+
+    public static string NormalizeUri(this string? value,
+        string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
+            ? value!.Trim().TrimEnd('/').ToLowerInvariant()
+            : defaultValue;
+    }
 }
