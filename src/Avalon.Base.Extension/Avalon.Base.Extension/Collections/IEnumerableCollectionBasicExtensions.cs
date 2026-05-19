@@ -145,4 +145,24 @@ public static class IEnumerableCollectionBasicExtensions
 
         return new StringBuilder();
     }
+
+    public static string[]? NormalizeValues(this IEnumerable<string>? values)
+    {
+        return values.NormalizeValues(StringComparer.OrdinalIgnoreCase);
+    }
+
+    public static string[]? NormalizeValues(this IEnumerable<string>? values,
+        StringComparer comparer)
+    {
+        if (values.HasElements())
+        {
+            return values
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .Select(value => value.Trim())
+                .Distinct(comparer)
+                .ToArray();
+        }
+
+        return null;
+    }
 }
