@@ -103,6 +103,7 @@ internal class DataRowSerialization
         try
         {
             string type = property.PropertyType.ToString();
+            Type propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
             if (type.Equals("System.String"))
             {
                 property.SetValue(objectToMap, row[column].ToString(), null);
@@ -139,7 +140,7 @@ internal class DataRowSerialization
                         property.PropertyType, row[column].ToString(), true));
                 }
             }
-            else if (property.PropertyType.Equals(typeof(DateTimeOffset)))
+            else if (propertyType.Equals(typeof(DateTimeOffset)))
             {
                 property.SetValue(objectToMap, DateTimeOffset.Parse(row[column].ToString()), null);
             }
