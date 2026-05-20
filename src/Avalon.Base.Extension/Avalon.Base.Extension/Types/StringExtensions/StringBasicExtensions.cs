@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.Types;
@@ -189,9 +190,23 @@ public static class StringBasicExtensions
     /// <param name="value">The input string to be trimmed.</param>
     /// <param name="removeBreaks">If true, removes line breaks from the string.</param>
     /// <returns>A trimmed string with optional line breaks removed. Returns an empty string if the input is null.</returns>
-    public static string ToSafeTrim(this string value, bool removeBreaks = false)
+    public static string ToSafeTrim(this string value, 
+        bool removeBreaks = false)
     {
-        return value.ToSafeString(removeBreaks);
+        return value.ToSafeString(removeBreaks).Trim();
+    }
+
+    public static string ToSafeTrim(
+        this string value,
+        string? defaultValue = null,
+        bool removeBreaks = false)
+    {
+        if (value.IsNullOrEmpty())
+        {
+            return defaultValue!;
+        }
+
+        return value.ToSafeTrim(removeBreaks);
     }
 
     /// <summary>
