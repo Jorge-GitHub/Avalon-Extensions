@@ -200,6 +200,15 @@ public static class StringExtensions
         string defaultValue = "")
     {
         return value!.IsNotNullOrEmpty()
+            ? value!.Trim()
+            : defaultValue;
+    }
+
+    public static string NormalizeToLowerValue(
+        this string? value,
+        string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
             ? value!.Trim().ToLowerInvariant()
             : defaultValue;
     }

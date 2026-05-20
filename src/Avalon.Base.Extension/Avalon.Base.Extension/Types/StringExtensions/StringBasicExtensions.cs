@@ -196,9 +196,9 @@ public static class StringBasicExtensions
         return value.ToSafeString(removeBreaks).Trim();
     }
 
-    public static string ToSafeTrim(
+    public static string ToTrimmedOrDefault(
         this string value,
-        string? defaultValue = null,
+        string defaultValue = "",
         bool removeBreaks = false)
     {
         if (value.IsNullOrEmpty())
