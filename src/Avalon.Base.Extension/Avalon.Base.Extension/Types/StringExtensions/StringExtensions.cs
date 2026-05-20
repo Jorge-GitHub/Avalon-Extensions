@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
@@ -120,13 +120,19 @@ public static class StringExtensions
 	/// <returns>
 	/// Flag that determinate whether a string is a valid email or not.
 	/// </returns>
-	public static bool IsAValidEmail(this string email)
+	public static bool IsAValidEmail(this string? email)
     {
-        if (email.IsNotNullOrEmpty())
+        if (string.IsNullOrWhiteSpace(email) || email != email.Trim())
         {
-			return new EmailAddressAttribute().IsValid(email);
+            return false;
 		}
-        return false;
+
+        if (!MailAddress.TryCreate(email, out MailAddress? address))
+        {
+            return false;
+        }
+
+        return address.Address == email && HasValidEmailHost(address.Host);
     }
 
 	/// <summary>
@@ -138,10 +144,30 @@ public static class StringExtensions
 	/// <returns>
 	/// Flag that determinate whether a string is not a valid email or not.
 	/// </returns>
-	public static bool IsNotAValidEmail(this string email)
+	public static bool IsNotAValidEmail(this string? email)
 	{
 		return !email.IsAValidEmail();
 	}
+
+    private static bool HasValidEmailHost(string host)
+    {
+        string[] labels = host.Split('.');
+
+        if (labels.Length < 2)
+        {
+            return false;
+        }
+
+        foreach (string label in labels)
+        {
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// Remove the text between two strings.

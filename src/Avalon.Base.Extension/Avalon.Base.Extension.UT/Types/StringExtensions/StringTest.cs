@@ -42,15 +42,46 @@ public class StringTest
     [TestMethod]
     public void TestEmail()
     {
-        Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
-        Assert.IsFalse("jamesbond".IsAValidEmail());
+        string[] validEmails =
+        {
+            "jamesbond@gmail.com",
+            "jane@about.me",
+            "jane@archive.history",
+            "person@example.technology",
+            "first.last+tag@sub.example.solutions"
+        };
+
+        foreach (string email in validEmails)
+        {
+            Assert.IsTrue(email.IsAValidEmail(), $"{email} should be valid.");
+        }
     }
 
     [TestMethod]
     public void TestNotValidEmail()
     {
+        string?[] invalidEmails =
+        {
+            null,
+            string.Empty,
+            " ",
+            "jamesbond",
+            "a@b",
+            "name@example",
+            "name@example.com ",
+            " name@example.com",
+            "name@@example.com",
+            "name@example..com",
+            "first last@example.com"
+        };
+
         Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
-        Assert.IsTrue("jamesbond".IsNotAValidEmail());
+
+        foreach (string? email in invalidEmails)
+        {
+            Assert.IsFalse(email.IsAValidEmail(), $"{email} should be invalid.");
+            Assert.IsTrue(email.IsNotAValidEmail(), $"{email} should not be valid.");
+        }
     }
 
     /// <summary>
