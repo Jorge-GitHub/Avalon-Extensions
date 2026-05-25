@@ -314,7 +314,7 @@ public static class StringConversionExtensions
     /// <returns>
     /// Object from the json string.
     /// </returns>
-    public static T ToObjectSafe<T>(this string json) where T : class
+    public static T? ToObjectSafe<T>(this string json) where T : class
     {
         try
         {
