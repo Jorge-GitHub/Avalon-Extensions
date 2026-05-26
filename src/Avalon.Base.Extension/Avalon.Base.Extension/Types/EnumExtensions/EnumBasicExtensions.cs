@@ -102,11 +102,19 @@ public static class EnumBasicExtensions
         return defaultValue;
     }
 
-    public static TEnum OrDefaultIfUndefined<TEnum>(
-        this TEnum value,
+    public static TEnum OrDefaultIfUndefined<TEnum>(this TEnum value,
         TEnum defaultValue)
         where TEnum : struct, Enum
     {
         return Enum.IsDefined(value) ? value : defaultValue;
+    }
+
+    public static TEnum ToEnumSafe<TEnum>(this string? value, TEnum defaultValue = default)
+        where TEnum : struct, Enum
+    {
+        return Enum.TryParse(value, ignoreCase: true, out TEnum parsed) &&
+            Enum.IsDefined(typeof(TEnum), parsed)
+            ? parsed
+            : defaultValue;
     }
 }
