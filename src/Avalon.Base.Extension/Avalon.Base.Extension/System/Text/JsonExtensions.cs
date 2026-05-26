@@ -11,8 +11,7 @@ public static class JsonExtensions
     }
 
     public static JsonElement ToParseJsonElementOrDefault(
-        this string? json,
-        string defaultJson)
+        this string? json, string defaultJson)
     {
         try
         {
@@ -27,5 +26,11 @@ public static class JsonExtensions
 
             return document.RootElement.Clone();
         }
+    }
+
+    public static string GetArgumentsJson(this JsonElement arguments)
+    {
+        return arguments.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
+            ? "{}" : arguments.GetRawText();
     }
 }
