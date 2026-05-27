@@ -226,24 +226,32 @@ public static class StringExtensions
         string defaultValue = "")
     {
         return value!.IsNotNullOrEmpty()
-            ? value!.Trim()
-            : defaultValue;
+            ? value!.Trim() : defaultValue;
     }
 
-    public static string NormalizeToLowerValue(
-        this string? value,
+    public static string NormalizeToLowerValue(this string? value,
         string defaultValue = "")
     {
         return value!.IsNotNullOrEmpty()
-            ? value!.Trim().ToLowerInvariant()
-            : defaultValue;
+            ? value!.Trim().ToLowerInvariant() : defaultValue;
     }
 
-    public static string NormalizeUri(this string? value,
-        string defaultValue = "")
+    public static string NormalizeUri(this string? value, string defaultValue = "")
     {
         return value!.IsNotNullOrEmpty()
             ? value!.Trim().TrimEnd('/').ToLowerInvariant()
             : defaultValue;
+    }
+
+    public static string GetOrCreateNewId(string? id, bool removeHyphens = false)
+    {
+        if(removeHyphens)
+        {
+            return string.IsNullOrWhiteSpace(id)
+                ? Guid.NewGuid().ToString("N") : id.Replace("-", "");
+        }
+
+        return string.IsNullOrWhiteSpace(id)
+            ? Guid.NewGuid().ToString() : id;
     }
 }

@@ -18,8 +18,7 @@ public static class StringFormatExtensions
             }
 
             return digits.Length > 0
-                ? digits.ToString()
-                : string.Empty;
+                ? digits.ToString() : string.Empty;
         }
 
         return value;
