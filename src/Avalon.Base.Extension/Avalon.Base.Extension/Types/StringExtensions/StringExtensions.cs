@@ -243,7 +243,7 @@ public static class StringExtensions
             : defaultValue;
     }
 
-    public static string GetOrCreateNewId(string? id, bool removeHyphens = false)
+    public static string GetOrCreateNewId(this string? id, bool removeHyphens = false)
     {
         if(removeHyphens)
         {
