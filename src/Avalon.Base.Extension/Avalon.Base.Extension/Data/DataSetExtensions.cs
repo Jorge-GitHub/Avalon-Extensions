@@ -1,6 +1,5 @@
 ﻿using Avalon.Base.Extension.Types;
 using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -32,6 +31,29 @@ public static class DataSetExtensions
         }
 
         return false;
+    }
+
+    public static bool HasData(this DataSet? data, int tableIndex)
+    {
+        if (data is null ||
+            data.Tables is null ||
+            tableIndex < 0 ||
+            data.Tables.Count <= tableIndex)
+        {
+            return false;
+        }
+
+        return data.Tables[tableIndex].HasData();
+    }
+
+    public static bool IsEmpty(this DataSet data)
+    {
+        return !data.HasData();
+    }
+
+    public static bool IsEmpty(this DataSet? data, int tableIndex)
+    {
+        return !data.HasData(tableIndex);
     }
 
     /// <summary>
@@ -206,6 +228,6 @@ public static class DataSetExtensions
             return data.Tables[0].ToObjectFromFirstUserFromDataTable<T>();
         }
 
-        return default;
+        return default!;
     }
 }
