@@ -61,4 +61,17 @@ public static class DataTableExtensions
 
         return default;
     }
+
+    public static bool HasData(this DataSet? data, int tableIndex)
+    {
+        if (data is null ||
+            data.Tables is null ||
+            tableIndex < 0 ||
+            data.Tables.Count <= tableIndex)
+        {
+            return false;
+        }
+
+        return data.Tables[tableIndex].HasData();
+    }
 }
