@@ -18,7 +18,26 @@ public static class EnumsListExtensions
         if (enums.HasElements())
         {
             return enums.Select(
-                value => value.ToString()).ToList();
+                value => value.ToString())
+                .ToList();
+        }
+
+        return null!;
+    }
+
+    public static short[]? ToDistinctInt16Values<TEnum>(
+        this IEnumerable<TEnum>? values)
+        where TEnum : struct, Enum
+    {
+        if (values is not null)
+        {
+            short[] normalizedValues = values
+                .Select(value => Convert.ToInt16(value))
+                .Distinct()
+                .ToArray();
+
+            return normalizedValues.Length == 0
+                ? null : normalizedValues;
         }
 
         return null;
