@@ -33,4 +33,19 @@ public static class JsonExtensions
         return arguments.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
             ? "{}" : arguments.GetRawText();
     }
+
+    public static string? GetPropertyValueAsString(this JsonElement element, 
+        string propertyName)
+    {
+        string? value = null;
+
+        if (element.ValueKind == JsonValueKind.Object 
+            && element.TryGetProperty(propertyName, out JsonElement property))
+        {
+            value = property.ValueKind == JsonValueKind.String
+                ? property.GetString() : property.ToString();
+        }
+
+        return value;
+    }
 }
