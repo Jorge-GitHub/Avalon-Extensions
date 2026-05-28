@@ -103,61 +103,61 @@ internal class DataRowSerialization
     {
         try
         {
-            string type = property.PropertyType.ToString();
+            string value = row[column].ToString() ?? string.Empty;
             Type propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-            if (type.Equals("System.String"))
+
+            if (propertyType.Equals(typeof(string)))
             {
-                property.SetValue(objectToMap, row[column].ToString(), null);
+                property.SetValue(objectToMap, value, null);
             }
-            else if (type.Equals("System.Int32") | type.Equals("System.Nullable1[System.Int32]"))
+            else if (propertyType.Equals(typeof(int)))
             {
-                property.SetValue(objectToMap, int.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, int.Parse(value), null);
             }
-            else if (type.Equals("System.DateTime"))
+            else if (propertyType.Equals(typeof(DateTime)))
             {
-                property.SetValue(objectToMap, DateTime.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, DateTime.Parse(value), null);
             }
-            else if (type.Equals("System.Boolean"))
+            else if (propertyType.Equals(typeof(bool)))
             {
-                property.SetValue(objectToMap, bool.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, bool.Parse(value), null);
             }
-            else if (type.Equals("System.Double"))
+            else if (propertyType.Equals(typeof(double)))
             {
-                property.SetValue(objectToMap, double.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, double.Parse(value), null);
             }
-            else if (type.Equals("System.Decimal"))
+            else if (propertyType.Equals(typeof(decimal)))
             {
-                property.SetValue(objectToMap, decimal.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, decimal.Parse(value), null);
             }
-            else if (property.PropertyType.IsEnum)
+            else if (propertyType.IsEnum)
             {
-                if (row[column].ToString().IsNumeric())
+                if (value.IsNumeric())
                 {
-                    property.SetValue(objectToMap, int.Parse(row[column].ToString()));
+                    property.SetValue(objectToMap, Enum.ToObject(propertyType, int.Parse(value)), null);
                 }
                 else
                 {
-                    property.SetValue(objectToMap, Enum.Parse(
-                        property.PropertyType, row[column].ToString(), true));
+                    property.SetValue(objectToMap, Enum.Parse(propertyType, value, true), null);
                 }
             }
             else if (propertyType.Equals(typeof(DateTimeOffset)))
             {
-                property.SetValue(objectToMap, DateTimeOffset.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, DateTimeOffset.Parse(value), null);
             }
-            else if (property.PropertyType.Equals(typeof(float)))
+            else if (propertyType.Equals(typeof(float)))
             {
-                property.SetValue(objectToMap, float.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, float.Parse(value), null);
             }
-            else if (property.PropertyType.Equals(typeof(long)))
+            else if (propertyType.Equals(typeof(long)))
             {
-                property.SetValue(objectToMap, long.Parse(row[column].ToString()), null);
+                property.SetValue(objectToMap, long.Parse(value), null);
             }
         }
         catch (Exception ex)
         {
             ex.HelpLink = this.prepareErrorForSetPropertyValue(property, column, row);
-            throw ex;
+            throw;
         }
     }
 
