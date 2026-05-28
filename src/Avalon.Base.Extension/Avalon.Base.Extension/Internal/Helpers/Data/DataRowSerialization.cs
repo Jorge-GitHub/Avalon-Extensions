@@ -1,4 +1,5 @@
 ﻿using Avalon.Base.Extension.Types;
+using System;
 using System.Data;
 using System.Reflection;
 using System.Text;
@@ -97,54 +98,66 @@ internal class DataRowSerialization
     /// <param name="objectToMap">
     /// Object to map.
     /// </param>
-    private void setPropertyValueWithDataRow(DataRow row, PropertyInfo property,
-        DataColumn column, object objectToMap)
+    private void setPropertyValueWithDataRow(DataRow row,
+        PropertyInfo property, DataColumn column, object objectToMap)
     {
         try
         {
-            object rawValue = row[column];
-
-            if (rawValue == DBNull.Value)
+            string type = property.PropertyType.ToString();
+            Type propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+            if (type.Equals("System.String"))
             {
-                property.SetValue(objectToMap, null, null);
-
-                return;
+                property.SetValue(objectToMap, row[column].ToString(), null);
             }
-
-            Type targetType = Nullable.GetUnderlyingType(property.PropertyType)
-                ?? property.PropertyType;
-
-            object value;
-
-            if (targetType.IsEnum)
+            else if (type.Equals("System.Int32") | type.Equals("System.Nullable1[System.Int32]"))
             {
-                string enumValue = rawValue.ToString() ?? string.Empty;
-                value = enumValue.IsNumeric()
-                    ? Enum.ToObject(targetType, Convert.ToInt32(rawValue))
-                    : Enum.Parse(targetType, enumValue, true);
+                property.SetValue(objectToMap, int.Parse(row[column].ToString()), null);
             }
-            else if (targetType.Equals(typeof(Guid)))
+            else if (type.Equals("System.DateTime"))
             {
-                value = rawValue is Guid guid
-                    ? guid : Guid.Parse(rawValue.ToString() ?? string.Empty);
+                property.SetValue(objectToMap, DateTime.Parse(row[column].ToString()), null);
             }
-            else if (targetType.Equals(typeof(DateTimeOffset)))
+            else if (type.Equals("System.Boolean"))
             {
-                value = rawValue is DateTimeOffset dateTimeOffset
-                    ? dateTimeOffset
-                    : DateTimeOffset.Parse(rawValue.ToString() ?? string.Empty);
+                property.SetValue(objectToMap, bool.Parse(row[column].ToString()), null);
             }
-            else
+            else if (type.Equals("System.Double"))
             {
-                value = Convert.ChangeType(rawValue, targetType);
+                property.SetValue(objectToMap, double.Parse(row[column].ToString()), null);
             }
-
-            property.SetValue(objectToMap, value, null);
+            else if (type.Equals("System.Decimal"))
+            {
+                property.SetValue(objectToMap, decimal.Parse(row[column].ToString()), null);
+            }
+            else if (property.PropertyType.IsEnum)
+            {
+                if (row[column].ToString().IsNumeric())
+                {
+                    property.SetValue(objectToMap, int.Parse(row[column].ToString()));
+                }
+                else
+                {
+                    property.SetValue(objectToMap, Enum.Parse(
+                        property.PropertyType, row[column].ToString(), true));
+                }
+            }
+            else if (propertyType.Equals(typeof(DateTimeOffset)))
+            {
+                property.SetValue(objectToMap, DateTimeOffset.Parse(row[column].ToString()), null);
+            }
+            else if (property.PropertyType.Equals(typeof(float)))
+            {
+                property.SetValue(objectToMap, float.Parse(row[column].ToString()), null);
+            }
+            else if (property.PropertyType.Equals(typeof(long)))
+            {
+                property.SetValue(objectToMap, long.Parse(row[column].ToString()), null);
+            }
         }
         catch (Exception ex)
         {
             ex.HelpLink = this.prepareErrorForSetPropertyValue(property, column, row);
-            throw;
+            throw ex;
         }
     }
 
