@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.Types;
@@ -597,5 +596,10 @@ public static class StringBasicExtensions
         }
 
         return string.Empty;
+    }
+
+    public static bool EqualsIgnoreCase(this string? value, string? other)
+    {
+        return string.Equals(value, other, StringComparison.OrdinalIgnoreCase);
     }
 }
