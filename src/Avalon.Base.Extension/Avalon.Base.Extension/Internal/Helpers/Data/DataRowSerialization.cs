@@ -97,61 +97,49 @@ internal class DataRowSerialization
     /// <param name="objectToMap">
     /// Object to map.
     /// </param>
-    private void setPropertyValueWithDataRow(DataRow row,
-        PropertyInfo property, DataColumn column, object objectToMap)
+    private void setPropertyValueWithDataRow(DataRow row, PropertyInfo property,
+        DataColumn column, object objectToMap)
     {
         try
         {
-            string value = row[column].ToString() ?? string.Empty;
-            Type propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+            object rawValue = row[column];
 
-            if (propertyType.Equals(typeof(string)))
+            if (rawValue == DBNull.Value)
             {
-                property.SetValue(objectToMap, value, null);
+                property.SetValue(objectToMap, null, null);
+
+                return;
             }
-            else if (propertyType.Equals(typeof(int)))
+
+            Type targetType = Nullable.GetUnderlyingType(property.PropertyType)
+                ?? property.PropertyType;
+
+            object value;
+
+            if (targetType.IsEnum)
             {
-                property.SetValue(objectToMap, int.Parse(value), null);
+                string enumValue = rawValue.ToString() ?? string.Empty;
+                value = enumValue.IsNumeric()
+                    ? Enum.ToObject(targetType, Convert.ToInt32(rawValue))
+                    : Enum.Parse(targetType, enumValue, true);
             }
-            else if (propertyType.Equals(typeof(DateTime)))
+            else if (targetType.Equals(typeof(Guid)))
             {
-                property.SetValue(objectToMap, DateTime.Parse(value), null);
+                value = rawValue is Guid guid
+                    ? guid : Guid.Parse(rawValue.ToString() ?? string.Empty);
             }
-            else if (propertyType.Equals(typeof(bool)))
+            else if (targetType.Equals(typeof(DateTimeOffset)))
             {
-                property.SetValue(objectToMap, bool.Parse(value), null);
+                value = rawValue is DateTimeOffset dateTimeOffset
+                    ? dateTimeOffset
+                    : DateTimeOffset.Parse(rawValue.ToString() ?? string.Empty);
             }
-            else if (propertyType.Equals(typeof(double)))
+            else
             {
-                property.SetValue(objectToMap, double.Parse(value), null);
+                value = Convert.ChangeType(rawValue, targetType);
             }
-            else if (propertyType.Equals(typeof(decimal)))
-            {
-                property.SetValue(objectToMap, decimal.Parse(value), null);
-            }
-            else if (propertyType.IsEnum)
-            {
-                if (value.IsNumeric())
-                {
-                    property.SetValue(objectToMap, Enum.ToObject(propertyType, int.Parse(value)), null);
-                }
-                else
-                {
-                    property.SetValue(objectToMap, Enum.Parse(propertyType, value, true), null);
-                }
-            }
-            else if (propertyType.Equals(typeof(DateTimeOffset)))
-            {
-                property.SetValue(objectToMap, DateTimeOffset.Parse(value), null);
-            }
-            else if (propertyType.Equals(typeof(float)))
-            {
-                property.SetValue(objectToMap, float.Parse(value), null);
-            }
-            else if (propertyType.Equals(typeof(long)))
-            {
-                property.SetValue(objectToMap, long.Parse(value), null);
-            }
+
+            property.SetValue(objectToMap, value, null);
         }
         catch (Exception ex)
         {
