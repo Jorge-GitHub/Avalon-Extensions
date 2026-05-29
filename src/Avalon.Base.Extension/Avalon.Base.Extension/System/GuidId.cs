@@ -1,6 +1,6 @@
 ﻿namespace Avalon.Base.Extension.System;
 
-public static class GuidExtensions
+public static class GuidId
 {
     public static string NewId(bool removeHyphens = true)
     {
