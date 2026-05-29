@@ -44,11 +44,11 @@ public static class DirectoryExtensions
             return AppContext.BaseDirectory;
         }
 
-        if (Path.IsPathRooted(folder))
+        if (Path.IsPathFullyQualified(folder))
         {
             return folder;
         }
 
-        return Path.Combine(AppContext.BaseDirectory, folder);
+        return Path.GetFullPath(folder, AppContext.BaseDirectory);
     }
 }
