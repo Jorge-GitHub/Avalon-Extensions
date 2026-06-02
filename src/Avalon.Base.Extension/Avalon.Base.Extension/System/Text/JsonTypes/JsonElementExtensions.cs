@@ -57,7 +57,7 @@ public static  class JsonElementExtensions
         return value;
     }
 
-    public static string ApplyRouteArguments(string route, JsonElement arguments)
+    public static string ApplyRouteArguments(this JsonElement arguments, string route)
     {
         return RouteParameterPattern.Replace(
             route,
