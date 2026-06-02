@@ -71,4 +71,21 @@ public static  class JsonElementExtensions
                     value ?? MissingRouteArgumentValue);
             });
     }
+
+    public static bool TryGetProperty(this JsonElement metadata, string propertyName, 
+        out JsonElement property)
+    {
+        property = default;
+
+        foreach (JsonProperty item in metadata.EnumerateObject())
+        {
+            if (string.Equals(item.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                property = item.Value;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
