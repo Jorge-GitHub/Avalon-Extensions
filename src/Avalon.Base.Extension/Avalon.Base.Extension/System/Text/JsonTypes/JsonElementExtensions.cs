@@ -1,10 +1,18 @@
 ﻿using Avalon.Base.Extension.Types;
+using System.Net;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
-namespace Avalon.Base.Extension.System.Text;
+namespace Avalon.Base.Extension.System.Text.JsonTypes;
 
-public static class JsonExtensions
+public static  class JsonElementExtensions
 {
+    private const string RouteParameterRegexPattern = @"\{(?<name>[A-Za-z0-9_]+)\}";
+    private const string RouteParameterNameGroup = "name";
+    public const string MissingRouteArgumentValue = "";
+    private static readonly Regex RouteParameterPattern = new(
+        RouteParameterRegexPattern);
+
     public static JsonElement ToParseJsonElementOrEmptyObject(this string? json)
     {
         return json.ToParseJsonElementOrDefault(defaultJson: "{}");
@@ -34,12 +42,12 @@ public static class JsonExtensions
             ? "{}" : arguments.GetRawText();
     }
 
-    public static string? GetPropertyValueAsString(this JsonElement element, 
+    public static string? GetPropertyValueAsString(this JsonElement element,
         string propertyName)
     {
         string? value = null;
 
-        if (element.ValueKind == JsonValueKind.Object 
+        if (element.ValueKind == JsonValueKind.Object
             && element.TryGetProperty(propertyName, out JsonElement property))
         {
             value = property.ValueKind == JsonValueKind.String
@@ -49,22 +57,18 @@ public static class JsonExtensions
         return value;
     }
 
-    public static JsonDocument? TryParsePayload(this string payloadJson)
+    public static string ApplyRouteArguments(string route, JsonElement arguments)
     {
-        JsonDocument? payload = null;
-
-        if (!string.IsNullOrWhiteSpace(payloadJson))
-        {
-            try
+        return RouteParameterPattern.Replace(
+            route,
+            match =>
             {
-                payload = JsonDocument.Parse(payloadJson);
-            }
-            catch (JsonException)
-            {
-                payload = null;
-            }
-        }
+                string name = match.Groups[
+                    RouteParameterNameGroup].Value;
+                string? value = arguments.GetPropertyValueAsString(name);
 
-        return payload;
+                return WebUtility.UrlEncode(
+                    value ?? MissingRouteArgumentValue);
+            });
     }
 }
