@@ -101,7 +101,7 @@ public static  class JsonElementExtensions
         return false;
     }
 
-    public static DateTimeOffset? ReadDateTimeOffset(this JsonElement metadata, string propertyName)
+    public static DateTimeOffset? GetPropertyValueAsDateTimeOffset(this JsonElement metadata, string propertyName)
     {
         DateTimeOffset? value = null;
         string dateText = metadata.GetPropertyValueAsString(propertyName) ?? string.Empty;
