@@ -18,6 +18,18 @@ public static  class JsonElementExtensions
         return json.ToParseJsonElementOrDefault(defaultJson: "{}");
     }
 
+    public static JsonElement ToParseJsonObjectElementOrEmptyObject(this string? json)
+    {
+        JsonElement element = json.ToParseJsonElementOrEmptyObject();
+
+        if (element.ValueKind != JsonValueKind.Object)
+        {
+            element = "{}".ToParseJsonElementOrEmptyObject();
+        }
+
+        return element;
+    }
+
     public static JsonElement ToParseJsonElementOrDefault(
         this string? json, string defaultJson)
     {
@@ -87,5 +99,40 @@ public static  class JsonElementExtensions
         }
 
         return false;
+    }
+
+    public static DateTimeOffset? ReadDateTimeOffset(this JsonElement metadata, string propertyName)
+    {
+        DateTimeOffset? value = null;
+        string dateText = metadata.GetPropertyValueAsString(propertyName) ?? string.Empty;
+
+        if (DateTimeOffset.TryParse(dateText, out DateTimeOffset parsedDate))
+        {
+            value = parsedDate;
+        }
+
+        return value;
+    }
+
+    public static string ReadArgumentsJson(this JsonElement metadata, string propertyName,
+        string defaultValue = "{}")
+    {
+        string argumentsJson = defaultValue;
+
+        if (JsonElementExtensions.TryGetProperty(metadata, propertyName, out JsonElement property))
+        {
+            if (property.ValueKind == JsonValueKind.String)
+            {
+                string? propertyValue = property.GetString();
+                JsonElement parsedArguments = propertyValue.ToParseJsonObjectElementOrEmptyObject();
+                argumentsJson = parsedArguments.GetArgumentsJson();
+            }
+            else if (property.ValueKind == JsonValueKind.Object)
+            {
+                argumentsJson = property.GetArgumentsJson();
+            }
+        }
+
+        return argumentsJson;
     }
 }
