@@ -117,4 +117,12 @@ public static class EnumBasicExtensions
             ? parsed
             : defaultValue;
     }
+
+    public static TEnum ToEnumSafe<TEnum>(this int value, TEnum defaultValue = default)
+        where TEnum : struct, Enum
+    {
+        return Enum.IsDefined(typeof(TEnum), value)
+            ? (TEnum)Enum.ToObject(typeof(TEnum), value)
+            : defaultValue;
+    }
 }

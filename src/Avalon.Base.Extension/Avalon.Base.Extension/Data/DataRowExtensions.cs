@@ -207,4 +207,20 @@ public static class DataRowExtensions
             }
         }
     }
+
+    public static bool Contains(this DataRow row, IReadOnlyCollection<string> columnNames)
+    {
+        if (columnNames.HasElements())
+        {
+            foreach (string columnName in columnNames)
+            {
+                if (row.Table.Columns.Contains(columnName))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
