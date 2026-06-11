@@ -51,4 +51,24 @@ public static class DirectoryExtensions
 
         return Path.GetFullPath(folder, AppContext.BaseDirectory);
     }
+
+    public static void DeleteEmptyParentDirectory(this string filePath, string rootPath)
+    {
+        string? folderPath = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrWhiteSpace(folderPath))
+        {
+            string absoluteRootPath = Path.GetFullPath(rootPath).TrimEnd(
+                Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string absoluteFolderPath = Path.GetFullPath(folderPath).TrimEnd(
+                Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            if (!absoluteFolderPath.Equals(absoluteRootPath,
+                StringComparison.OrdinalIgnoreCase) &&
+                Directory.Exists(absoluteFolderPath) &&
+                !Directory.EnumerateFileSystemEntries(absoluteFolderPath).Any())
+            {
+                Directory.Delete(absoluteFolderPath);
+            }
+        }
+    }
 }
