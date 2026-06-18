@@ -74,6 +74,16 @@ public static class StringConversionExtensions
         return defaultValue;
     }
 
+    public static int? ToIntegerOrDefault(this string value, int? defaultValue)
+    {
+        if (value.IsAnInteger())
+        {
+            return int.Parse(value);
+        }
+
+        return defaultValue;
+    }
+
     /// <summary>
     /// Convert a string formated as a currency into a decimal.
     /// </summary>
@@ -124,6 +134,16 @@ public static class StringConversionExtensions
         }
 
         return defaultValue;
+    }
+
+    public static decimal? ToDecimalOrDefault(this string value, decimal? defaultValue)
+    {
+        if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return null;
     }
 
     public static long ToLong(this string value, long defaultValue = 0)

@@ -2,11 +2,9 @@
 
 public static class DictionaryExtensions
 {
-    public static void AddRange<TKey, TValue>(
-    this Dictionary<TKey, TValue[]> target,
-    Dictionary<TKey, TValue[]> source,
-    bool updateValue = true,
-    bool throwExceptionOnDuplicate = false)
+    public static void AddRange<TKey, TValue>(this Dictionary<TKey, 
+        TValue[]> target, Dictionary<TKey, TValue[]> source,
+        bool updateValue = true, bool throwExceptionOnDuplicate = false)
     {
         if (target == null)
         {
@@ -36,5 +34,15 @@ public static class DictionaryExtensions
                 }
             }
         }
+    }
+
+    public static string? GetValue(Dictionary<string, string> values, string key)
+    {
+        if (values.TryGetValue(key, out string? value))
+        {
+            return value;
+        }
+
+        return null;
     }
 }

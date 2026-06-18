@@ -50,4 +50,18 @@ public static class DateTimeConversionExtensions
     {
         return value.ToISOString(DateTimeKind.Unspecified);
     }
+
+    public static DateTimeOffset? ToDateTimeOffset(DateTime? value)
+    {
+        if (value.HasValue is false)
+        {
+            return null;
+        }
+
+        DateTime dateTime = value.Value.Kind == DateTimeKind.Unspecified
+            ? DateTime.SpecifyKind(value.Value, DateTimeKind.Utc)
+            : value.Value;
+
+        return new DateTimeOffset(dateTime.ToUniversalTime());
+    }
 }
