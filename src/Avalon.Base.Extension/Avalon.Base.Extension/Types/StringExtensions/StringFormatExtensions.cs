@@ -6,9 +6,9 @@ public static class StringFormatExtensions
 {
     public static string? ToDigits(this string? value)
     {
-        if (value.IsNotNullOrEmpty())
+        if (value!.IsNotNullOrEmpty())
         {
-            StringBuilder digits = new(value.Length);
+            StringBuilder digits = new(value!.Length);
             foreach (char character in value)
             {
                 if (char.IsDigit(character))
