@@ -48,4 +48,26 @@ public static class StringFormatExtensions
 
         return phoneNumber;
     }
+
+    public static string? ToE164PhoneNumber(this string? phoneNumber)
+    {
+        string? digits = phoneNumber.ToDigits();
+
+        if (digits!.IsNotNullOrEmpty())
+        {
+            if (digits!.Length == 10)
+            {
+                return $"+1{digits}";
+            }
+
+            if (digits.Length is > 10 and <= 15)
+            {
+                return $"+{digits}";
+            }
+
+            return digits;
+        }
+
+        return null;
+    }
 }
