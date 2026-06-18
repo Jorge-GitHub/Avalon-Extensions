@@ -51,7 +51,7 @@ public static class DateTimeConversionExtensions
         return value.ToISOString(DateTimeKind.Unspecified);
     }
 
-    public static DateTimeOffset? ToDateTimeOffset(DateTime? value)
+    public static DateTimeOffset? ToDateTimeOffset(this DateTime? value)
     {
         if (value.HasValue is false)
         {

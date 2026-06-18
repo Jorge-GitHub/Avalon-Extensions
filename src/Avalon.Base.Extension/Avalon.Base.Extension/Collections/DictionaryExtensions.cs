@@ -36,7 +36,7 @@ public static class DictionaryExtensions
         }
     }
 
-    public static string? GetValue(Dictionary<string, string> values, string key)
+    public static string? GetValue(this Dictionary<string, string> values, string key)
     {
         if (values.TryGetValue(key, out string? value))
         {
