@@ -17,6 +17,12 @@ public static class DataRowConversionExtensions
             ? defaultValue : Convert.ToInt32(row[columnName]);
     }
 
+    public static int? ToInteger32(this DataRow row, string columnName, int? defaultValue)
+    {
+        return !row.Table.Columns.Contains(columnName) || row[columnName] is DBNull
+            ? defaultValue : Convert.ToInt32(row[columnName]);
+    }
+
     public static bool ToBoolean(this DataRow row, string columnName, bool defaultValue = false)
     {
         return !row.Table.Columns.Contains(columnName) || row[columnName] is DBNull
@@ -28,5 +34,18 @@ public static class DataRowConversionExtensions
         where TEnum : struct, Enum
     {
         return row.ToString(columnName).ToEnumSafe(defaultValue);
+    }
+
+    public static TimeSpan? ToTimeSpan(this DataRow row, string columnName, TimeSpan? defaultValue)
+    {
+        string value = row.ToString(columnName, string.Empty);
+        if (value.IsNotNullOrEmpty())
+        {
+            return TimeSpan.TryParse(value, out TimeSpan parsed)
+                ? parsed
+                : null;
+        }
+
+        return defaultValue;
     }
 }

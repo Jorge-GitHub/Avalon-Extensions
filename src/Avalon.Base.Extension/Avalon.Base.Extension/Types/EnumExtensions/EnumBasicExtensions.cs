@@ -114,15 +114,13 @@ public static class EnumBasicExtensions
     {
         return Enum.TryParse(value, ignoreCase: true, out TEnum parsed) &&
             Enum.IsDefined(typeof(TEnum), parsed)
-            ? parsed
-            : defaultValue;
+            ? parsed : defaultValue;
     }
 
     public static TEnum ToEnumSafe<TEnum>(this int value, TEnum defaultValue = default)
         where TEnum : struct, Enum
     {
         return Enum.IsDefined(typeof(TEnum), value)
-            ? (TEnum)Enum.ToObject(typeof(TEnum), value)
-            : defaultValue;
+            ? (TEnum)Enum.ToObject(typeof(TEnum), value) : defaultValue;
     }
 }
