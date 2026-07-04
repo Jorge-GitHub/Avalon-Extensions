@@ -602,4 +602,9 @@ public static class StringBasicExtensions
     {
         return string.Equals(value, other, StringComparison.OrdinalIgnoreCase);
     }
+
+    public static bool ContainsOrdinalIgnoreCase(this string? value, string candidate)
+    {
+        return (value ?? string.Empty).Contains(candidate, StringComparison.OrdinalIgnoreCase);
+    }
 }

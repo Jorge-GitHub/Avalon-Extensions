@@ -1,7 +1,6 @@
 ﻿using Avalon.Base.Extension.Types;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.System.Text.JsonTypes;
@@ -61,7 +60,8 @@ public static  class JsonElementExtensions
         string? value = null;
 
         if (element.ValueKind == JsonValueKind.Object
-            && element.TryGetProperty(propertyName, out JsonElement property))
+            && JsonElementExtensions.TryGetProperty(
+                element, propertyName, out JsonElement property))
         {
             value = property.ValueKind == JsonValueKind.String
                 ? property.GetString() : property.ToString();
@@ -73,10 +73,25 @@ public static  class JsonElementExtensions
     public static bool? GetPropertyValueAsBoolean(this JsonElement element,
         string propertyName)
     {
-        string? value = element.GetPropertyValueAsString(propertyName);
+        if (element.ValueKind == JsonValueKind.Object
+            && JsonElementExtensions.TryGetProperty(
+                element, propertyName, out JsonElement property))
+        {
+            if (property.ValueKind is JsonValueKind.True or JsonValueKind.False)
+            {
+                return property.GetBoolean();
+            }
 
-        return bool.TryParse(value, out bool parsedValue)
-            ? parsedValue : null;
+            if (property.ValueKind == JsonValueKind.String)
+            {
+                string? value = property.GetString();
+
+                return bool.TryParse(value, out bool parsedValue)
+                    ? parsedValue : null;
+            }
+        }
+
+        return null;
     }
 
     public static string ApplyRouteArguments(this JsonElement arguments, string route)

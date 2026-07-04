@@ -34,4 +34,16 @@ public class JsonElementExtensionsTest
         Assert.AreEqual(JsonValueKind.Object, element.ValueKind);
         Assert.AreEqual(0, element.EnumerateObject().Count());
     }
+
+    [TestMethod]
+    public void GetPropertyValueAsBoolean_WithBooleanAndStringValues_ReturnsParsedValues()
+    {
+        JsonElement element = "{\"IsActive\":true,\"isDeleted\":\"false\",\"invalid\":\"no\"}"
+            .ToParseJsonObjectElementOrEmptyObject();
+
+        Assert.AreEqual(true, element.GetPropertyValueAsBoolean("isActive"));
+        Assert.AreEqual(false, element.GetPropertyValueAsBoolean("IsDeleted"));
+        Assert.IsNull(element.GetPropertyValueAsBoolean("invalid"));
+        Assert.IsNull(element.GetPropertyValueAsBoolean("missing"));
+    }
 }
