@@ -1,6 +1,7 @@
 ﻿using Avalon.Base.Extension.Types;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.System.Text.JsonTypes;
@@ -67,6 +68,15 @@ public static  class JsonElementExtensions
         }
 
         return value;
+    }
+
+    public static bool? GetPropertyValueAsBoolean(this JsonElement element,
+        string propertyName)
+    {
+        string? value = element.GetPropertyValueAsString(propertyName);
+
+        return bool.TryParse(value, out bool parsedValue)
+            ? parsedValue : null;
     }
 
     public static string ApplyRouteArguments(this JsonElement arguments, string route)
