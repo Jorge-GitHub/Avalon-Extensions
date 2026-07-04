@@ -106,4 +106,14 @@ public class StringTest
         string cleanValue = value.Sanitize();
         Assert.IsTrue(cleanValue.Equals("Hello"));
     }
+
+    [TestMethod]
+    public void ContainsOrdinalIgnoreCase_WithNullAndDifferentCasing_ReturnsExpectedValue()
+    {
+        string? nullValue = null;
+
+        Assert.IsFalse(nullValue.ContainsOrdinalIgnoreCase("anything"));
+        Assert.IsTrue("Assistant Completed".ContainsOrdinalIgnoreCase("completed"));
+        Assert.IsFalse("Assistant Completed".ContainsOrdinalIgnoreCase("failed"));
+    }
 }
