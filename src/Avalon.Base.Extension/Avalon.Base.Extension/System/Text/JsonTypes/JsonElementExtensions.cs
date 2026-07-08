@@ -160,7 +160,7 @@ public static  class JsonElementExtensions
         return argumentsJson;
     }
 
-    public static int GetLimit(JsonElement arguments, int defaultLimit, int maxLimit)
+    public static int GetLimit(this JsonElement arguments, int defaultLimit, int maxLimit)
     {
         if (arguments.ValueKind == JsonValueKind.Object &&
             arguments.TryGetProperty("limit", out JsonElement limit) &&
@@ -173,7 +173,7 @@ public static  class JsonElementExtensions
         return defaultLimit;
     }
 
-    public static decimal? GetPropertyValueAsDecimal(JsonElement arguments, string propertyName)
+    public static decimal? GetPropertyValueAsDecimal(this JsonElement arguments, string propertyName)
     {
         if (arguments.ValueKind == JsonValueKind.Object &&
             arguments.TryGetProperty(propertyName, out JsonElement value) &&
@@ -186,7 +186,7 @@ public static  class JsonElementExtensions
         return null;
     }
 
-    public static int? GetPropertyValueAsInt(JsonElement arguments, string propertyName)
+    public static int? GetPropertyValueAsInt(this JsonElement arguments, string propertyName)
     {
         if (arguments.ValueKind == JsonValueKind.Object &&
             arguments.TryGetProperty(propertyName, out JsonElement value) &&
