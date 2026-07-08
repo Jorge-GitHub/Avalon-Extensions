@@ -346,4 +346,18 @@ public static class StringConversionExtensions
 
         return null;
     }
+
+    public static T? ToObjectSafe<T>(this string json, JsonSerializerOptions options) where T : class
+    {
+        try
+        {
+            if (json.IsNotNullOrEmpty())
+            {
+                return json.ToObject<T>(options);
+            }
+        }
+        catch { }
+
+        return null;
+    }
 }
