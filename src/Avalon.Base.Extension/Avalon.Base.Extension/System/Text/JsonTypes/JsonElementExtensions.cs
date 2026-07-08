@@ -96,8 +96,7 @@ public static  class JsonElementExtensions
 
     public static string ApplyRouteArguments(this JsonElement arguments, string route)
     {
-        return RouteParameterPattern.Replace(
-            route,
+        return RouteParameterPattern.Replace(route,
             match =>
             {
                 string name = match.Groups[
@@ -159,5 +158,59 @@ public static  class JsonElementExtensions
         }
 
         return argumentsJson;
+    }
+
+    public static int GetLimit(JsonElement arguments, int defaultLimit, int maxLimit)
+    {
+        if (arguments.ValueKind == JsonValueKind.Object &&
+            arguments.TryGetProperty("limit", out JsonElement limit) &&
+            limit.ValueKind == JsonValueKind.Number &&
+            limit.TryGetInt32(out int parsedLimit))
+        {
+            return Math.Clamp(parsedLimit, 1, maxLimit);
+        }
+
+        return defaultLimit;
+    }
+
+    public static decimal? GetPropertyValueAsDecimal(JsonElement arguments, string propertyName)
+    {
+        if (arguments.ValueKind == JsonValueKind.Object &&
+            arguments.TryGetProperty(propertyName, out JsonElement value) &&
+            value.ValueKind == JsonValueKind.Number &&
+            value.TryGetDecimal(out decimal parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return null;
+    }
+
+    public static int? GetPropertyValueAsInt(JsonElement arguments, string propertyName)
+    {
+        if (arguments.ValueKind == JsonValueKind.Object &&
+            arguments.TryGetProperty(propertyName, out JsonElement value) &&
+            value.ValueKind == JsonValueKind.Number &&
+            value.TryGetInt32(out int parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return null;
+    }
+
+    public static string? GetPropertyValueAsStringStrict(
+        this JsonElement element, string propertyName)
+    {
+        string? value = null;
+
+        if (element.ValueKind == JsonValueKind.Object &&
+            element.TryGetProperty(propertyName, out JsonElement property) &&
+            property.ValueKind == JsonValueKind.String)
+        {
+            value = property.GetString();
+        }
+
+        return value;
     }
 }
