@@ -27,4 +27,14 @@ public static class DateTimeOffsetBasicExtensions
     {
         return new DateTimeOffset(value.DateTime.FirstDayOfMonth());
     }
+
+    public static DateTimeOffset? ToUniversalTimeSafe(this DateTimeOffset? value)
+    {
+        if (value.HasValue)
+        {
+            return value.Value.ToUniversalTime();
+        }
+
+        return value;
+    }
 }
