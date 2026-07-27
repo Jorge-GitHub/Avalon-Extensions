@@ -102,7 +102,8 @@ internal class DataRowSerialization
     {
         try
         {
-            string value = row[column].ToString() ?? string.Empty;
+            object rawValue = row[column];
+            string value = rawValue.ToString() ?? string.Empty;
             Type propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
             if (propertyType.Equals(typeof(string)))
@@ -115,7 +116,9 @@ internal class DataRowSerialization
             }
             else if (propertyType.Equals(typeof(DateTime)))
             {
-                property.SetValue(objectToMap, DateTime.Parse(value), null);
+                property.SetValue(objectToMap, rawValue is DateTime dateTime
+                    ? dateTime
+                    : DateTime.Parse(value), null);
             }
             else if (propertyType.Equals(typeof(bool)))
             {
@@ -142,7 +145,8 @@ internal class DataRowSerialization
             }
             else if (propertyType.Equals(typeof(DateTimeOffset)))
             {
-                property.SetValue(objectToMap, DateTimeOffset.Parse(value), null);
+                property.SetValue(objectToMap,
+                    this.ToDateTimeOffset(rawValue, value), null);
             }
             else if (propertyType.Equals(typeof(float)))
             {
@@ -158,6 +162,43 @@ internal class DataRowSerialization
             ex.HelpLink = this.prepareErrorForSetPropertyValue(property, column, row);
             throw;
         }
+    }
+
+    /// <summary>
+    /// Converts a DataRow value into a DateTimeOffset without going through a
+    /// string.
+    ///
+    /// A DataColumn defaults to DataSetDateTime.UnspecifiedLocal, so a value the
+    /// provider read as UTC arrives here as DateTimeKind.Unspecified. Formatting
+    /// it drops the offset and the sub-second digits, and parsing the result back
+    /// attaches the local machine offset -- which moves the instant. Timestamps
+    /// are stored in UTC, so an unspecified value is anchored there.
+    /// </summary>
+    /// <param name="rawValue">
+    /// Raw DataRow value.
+    /// </param>
+    /// <param name="value">
+    /// String fallback for providers that surface the column as text.
+    /// </param>
+    /// <returns>
+    /// DateTimeOffset.
+    /// </returns>
+    private DateTimeOffset ToDateTimeOffset(object rawValue, string value)
+    {
+        if (rawValue is DateTimeOffset offset)
+        {
+            return offset;
+        }
+
+        if (rawValue is DateTime dateTime)
+        {
+            return dateTime.Kind == DateTimeKind.Unspecified
+                ? new DateTimeOffset(
+                    DateTime.SpecifyKind(dateTime, DateTimeKind.Utc))
+                : new DateTimeOffset(dateTime);
+        }
+
+        return DateTimeOffset.Parse(value);
     }
 
     /// <summary>
