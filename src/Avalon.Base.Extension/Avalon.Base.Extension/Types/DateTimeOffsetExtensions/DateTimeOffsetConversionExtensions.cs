@@ -50,4 +50,51 @@ public static class DateTimeOffsetConversionExtensions
     {
         return value?.ToUtcFromDataSet();
     }
+
+    /// <summary>
+    /// Rounds a value up to the next whole microsecond.
+    /// </summary>
+    /// <param name="value">
+    /// Value to round.
+    /// </param>
+    /// <remarks>
+    /// Postgres timestamptz holds microsecond precision, one digit short of
+    /// the 100ns ticks .NET (and Mongo's C# driver, which round-trips
+    /// DateTimeOffset via a Ticks field to survive BSON's millisecond-only
+    /// native date type) can represent. Persisting a tick-exact value as a
+    /// watermark/cursor otherwise gets silently truncated to an instant
+    /// earlier than the source value, so a later comparison against that same
+    /// source value can permanently read as "still ahead of the cursor".
+    /// Rounding up before persisting keeps the cursor at or after the value
+    /// it represents once truncated. A value already on a microsecond
+    /// boundary is returned untouched.
+    /// </remarks>
+    /// <returns>
+    /// DateTimeOffset rounded up to the next microsecond.
+    /// </returns>
+    public static DateTimeOffset ToMicrosecondCeiling(this DateTimeOffset value)
+    {
+        const long TicksPerMicrosecond = 10;
+
+        long ticks = value.UtcTicks;
+        long remainder = ticks % TicksPerMicrosecond;
+
+        return remainder == 0
+            ? value.ToUniversalTime()
+            : new DateTimeOffset(ticks + (TicksPerMicrosecond - remainder), TimeSpan.Zero);
+    }
+
+    /// <summary>
+    /// Rounds a value up to the next whole microsecond.
+    /// </summary>
+    /// <param name="value">
+    /// Value to round.
+    /// </param>
+    /// <returns>
+    /// DateTimeOffset rounded up to the next microsecond, or null.
+    /// </returns>
+    public static DateTimeOffset? ToMicrosecondCeiling(this DateTimeOffset? value)
+    {
+        return value?.ToMicrosecondCeiling();
+    }
 }

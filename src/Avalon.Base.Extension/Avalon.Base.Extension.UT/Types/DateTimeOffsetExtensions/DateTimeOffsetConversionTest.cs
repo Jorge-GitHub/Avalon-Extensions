@@ -90,4 +90,58 @@ public class DateTimeOffsetConversionTest
             new DateTimeOffset(2026, 7, 23, 4, 3, 48, 228, TimeSpan.Zero),
             normalized);
     }
+
+    /// <summary>
+    /// Verifies a value with sub-microsecond ticks rounds up to the next
+    /// microsecond boundary.
+    /// </summary>
+    [TestMethod]
+    public void TestToMicrosecondCeilingRoundsUpSubMicrosecondTicks()
+    {
+        DateTimeOffset value = new DateTimeOffset(2026, 6, 10, 7, 8, 10, TimeSpan.Zero)
+            .AddTicks(8339402);
+
+        DateTimeOffset ceiling = value.ToMicrosecondCeiling();
+
+        Assert.IsTrue(ceiling >= value);
+        Assert.AreEqual(0, ceiling.UtcTicks % 10);
+    }
+
+    /// <summary>
+    /// Verifies a value already on a microsecond boundary is returned
+    /// untouched.
+    /// </summary>
+    [TestMethod]
+    public void TestToMicrosecondCeilingLeavesExactMicrosecondUnchanged()
+    {
+        DateTimeOffset value = new DateTimeOffset(2026, 6, 10, 7, 8, 10, TimeSpan.Zero)
+            .AddTicks(8339400);
+
+        Assert.AreEqual(value, value.ToMicrosecondCeiling());
+    }
+
+    /// <summary>
+    /// Verifies the nullable overload propagates null.
+    /// </summary>
+    [TestMethod]
+    public void TestToMicrosecondCeilingPropagatesNull()
+    {
+        DateTimeOffset? missing = null;
+
+        Assert.IsNull(missing.ToMicrosecondCeiling());
+    }
+
+    /// <summary>
+    /// Verifies the nullable overload converts a value.
+    /// </summary>
+    [TestMethod]
+    public void TestToMicrosecondCeilingConvertsNullableValue()
+    {
+        DateTimeOffset value = new DateTimeOffset(2026, 6, 10, 7, 8, 10, TimeSpan.Zero)
+            .AddTicks(8339402);
+
+        DateTimeOffset? ceiling = ((DateTimeOffset?)value).ToMicrosecondCeiling();
+
+        Assert.IsTrue(ceiling >= value);
+    }
 }
