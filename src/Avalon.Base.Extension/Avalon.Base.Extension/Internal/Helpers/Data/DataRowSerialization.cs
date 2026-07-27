@@ -1,5 +1,4 @@
 ﻿using Avalon.Base.Extension.Types;
-using System;
 using System.Data;
 using System.Reflection;
 using System.Text;
