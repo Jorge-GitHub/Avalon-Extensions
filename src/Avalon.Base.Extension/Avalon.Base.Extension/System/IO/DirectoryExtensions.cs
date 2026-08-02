@@ -62,8 +62,10 @@ public static class DirectoryExtensions
             string absoluteFolderPath = Path.GetFullPath(folderPath).TrimEnd(
                 Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-            if (!absoluteFolderPath.Equals(absoluteRootPath,
-                StringComparison.OrdinalIgnoreCase) &&
+            // The root itself is kept: only folders below it are removed.
+            if (absoluteFolderPath.IsInsideFolder(absoluteRootPath) &&
+                !absoluteFolderPath.Equals(absoluteRootPath,
+                    StringComparison.OrdinalIgnoreCase) &&
                 Directory.Exists(absoluteFolderPath) &&
                 !Directory.EnumerateFileSystemEntries(absoluteFolderPath).Any())
             {
