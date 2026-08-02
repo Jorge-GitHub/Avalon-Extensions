@@ -37,6 +37,43 @@ public static class DirectoryExtensions
         }
     }
 
+    /// <summary>
+    /// Copy a directory and everything beneath it.
+    /// </summary>
+    /// <param name="directory">
+    /// Directory to copy.
+    /// </param>
+    /// <param name="destinationPath">
+    /// Path to copy into. It is created when it does not exist.
+    /// </param>
+    /// <param name="overwrite">
+    /// Flag that determines whether existing files are replaced.
+    /// </param>
+    /// <returns>
+    /// The number of files copied.
+    /// </returns>
+    public static int CopyTo(this DirectoryInfo directory,
+        string destinationPath, bool overwrite = false)
+    {
+        Directory.CreateDirectory(destinationPath);
+
+        int copied = 0;
+
+        foreach (FileInfo file in directory.GetFiles())
+        {
+            file.CopyTo(Path.Combine(destinationPath, file.Name), overwrite);
+            copied++;
+        }
+
+        foreach (DirectoryInfo subDirectory in directory.GetDirectories())
+        {
+            copied += subDirectory.CopyTo(
+                Path.Combine(destinationPath, subDirectory.Name), overwrite);
+        }
+
+        return copied;
+    }
+
     public static string ResolveFolderPath(this string folder)
     {
         if (string.IsNullOrWhiteSpace(folder))
