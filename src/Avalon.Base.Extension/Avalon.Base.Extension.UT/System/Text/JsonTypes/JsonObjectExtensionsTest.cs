@@ -49,4 +49,37 @@ public class JsonObjectExtensionsTest
         Assert.IsFalse("[\"not\", \"object\"]".TryParseMetadata(out JsonObject? arrayMetadata));
         Assert.IsNull(arrayMetadata);
     }
+
+    [TestMethod]
+    public void GetPropertyValueAsString_MatchesNameIgnoringCase_AndReturnsJsonForNonStrings()
+    {
+        JsonObject json = JsonNode.Parse(
+            "{\"ToolName\":\"read_page\",\"count\":3,\"data\":{\"a\":1}}")!.AsObject();
+
+        Assert.AreEqual("read_page", json.GetPropertyValueAsString("toolname"));
+        Assert.AreEqual("3", json.GetPropertyValueAsString("count"));
+        Assert.AreEqual("{\"a\":1}", json.GetPropertyValueAsString("data"));
+        Assert.IsNull(json.GetPropertyValueAsString("missing"));
+    }
+
+    [TestMethod]
+    public void GetPropertyValueAsBoolean_WithBooleanStringAndOtherValues_ReturnsParsedOrNull()
+    {
+        JsonObject json = JsonNode.Parse(
+            "{\"Shortened\":true,\"text\":\"false\",\"number\":1}")!.AsObject();
+
+        Assert.IsTrue(json.GetPropertyValueAsBoolean("shortened"));
+        Assert.IsFalse(json.GetPropertyValueAsBoolean("text"));
+        Assert.IsNull(json.GetPropertyValueAsBoolean("number"));
+        Assert.IsNull(json.GetPropertyValueAsBoolean("missing"));
+    }
+
+    [TestMethod]
+    public void GetPropertyNode_MatchesNameIgnoringCase()
+    {
+        JsonObject json = JsonNode.Parse("{\"Data\":{\"a\":1}}")!.AsObject();
+
+        Assert.IsNotNull(json.GetPropertyNode("data"));
+        Assert.IsNull(json.GetPropertyNode("other"));
+    }
 }

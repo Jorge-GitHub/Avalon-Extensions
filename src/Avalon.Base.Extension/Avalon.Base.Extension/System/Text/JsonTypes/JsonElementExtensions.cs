@@ -1,5 +1,6 @@
 ﻿using Avalon.Base.Extension.Types;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -212,5 +213,66 @@ public static  class JsonElementExtensions
         }
 
         return value;
+    }
+
+    /// <summary>
+    /// Serializes the element as compact JSON with the properties of every object sorted
+    /// by name, so two elements with the same content produce the same text whatever
+    /// order their properties came in. An undefined element serializes as null.
+    /// </summary>
+    /// <param name="element">
+    /// Element to serialize.
+    /// </param>
+    /// <returns>
+    /// The element as canonical JSON.
+    /// </returns>
+    public static string ToCanonicalJson(this JsonElement element)
+    {
+        using MemoryStream stream = new();
+
+        using (Utf8JsonWriter writer = new(stream))
+        {
+            element.WriteCanonical(writer);
+        }
+
+        return Encoding.UTF8.GetString(stream.ToArray());
+    }
+
+    private static void WriteCanonical(this JsonElement element, Utf8JsonWriter writer)
+    {
+        switch (element.ValueKind)
+        {
+            case JsonValueKind.Undefined:
+                writer.WriteNullValue();
+                break;
+
+            case JsonValueKind.Object:
+                writer.WriteStartObject();
+
+                foreach (JsonProperty property in element.EnumerateObject()
+                    .OrderBy(property => property.Name, StringComparer.Ordinal))
+                {
+                    writer.WritePropertyName(property.Name);
+                    property.Value.WriteCanonical(writer);
+                }
+
+                writer.WriteEndObject();
+                break;
+
+            case JsonValueKind.Array:
+                writer.WriteStartArray();
+
+                foreach (JsonElement item in element.EnumerateArray())
+                {
+                    item.WriteCanonical(writer);
+                }
+
+                writer.WriteEndArray();
+                break;
+
+            default:
+                element.WriteTo(writer);
+                break;
+        }
     }
 }
