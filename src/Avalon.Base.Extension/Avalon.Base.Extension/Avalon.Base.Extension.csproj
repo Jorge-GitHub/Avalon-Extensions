@@ -23,7 +23,7 @@
     <AssemblyName>Avalon.Base.Extension</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <!-- Its folder in Avalon.Libraries: the build publishes it there (Directory.Build.props). -->
-    <AvalonLibraryFolder>OpenSource</AvalonLibraryFolder>
+    <AvalonLibraryFolder>Base</AvalonLibraryFolder>
   </PropertyGroup>
 
   <ItemGroup>
