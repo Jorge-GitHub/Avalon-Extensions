@@ -1,0 +1,17 @@
+<Project>
+
+  <!--
+    Avalon.Libraries (AvalonTeamRepo/Avalon.Libraries): at AVALON_LIBRARIES when set, else
+    C:\Repos\Avalon.Libraries\. Where it is on the machine, the build publishes
+    Avalon.Base.Extension into it (AvalonLibraryFolder in the project); where it is not, nothing
+    changes.
+  -->
+  <PropertyGroup>
+    <AvalonLibrariesRepository Condition="'$(AvalonLibrariesRepository)' == ''">$(AVALON_LIBRARIES)</AvalonLibrariesRepository>
+    <AvalonLibrariesRepository Condition="'$(AvalonLibrariesRepository)' == ''">C:/Repos/Avalon.Libraries/</AvalonLibrariesRepository>
+    <AvalonLibrariesRepository>$([MSBuild]::EnsureTrailingSlash('$(AvalonLibrariesRepository)'))</AvalonLibrariesRepository>
+  </PropertyGroup>
+
+  <Import Project="$(AvalonLibrariesRepository)Avalon.Libraries.props" Condition="Exists('$(AvalonLibrariesRepository)Avalon.Libraries.props')" />
+
+</Project>
