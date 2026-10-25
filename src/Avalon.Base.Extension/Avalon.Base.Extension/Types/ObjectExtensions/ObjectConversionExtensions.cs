@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Avalon.Base.Extension.Types.ObjectExtensions;
 
 namespace Avalon.Base.Extension.Types;
 
@@ -35,13 +37,21 @@ public static class ObjectConversionExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// Flag that determines whether to remove line breaks from the string.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToSafeString(this object value)
+    public static string ToSafeString(this object value, bool removeBreaks = false)
     {
         if (value.IsNotNull())
         {
+            if (removeBreaks)
+            {
+                return value.ToString().Replace("\r", "").Replace("\n", "");
+            }
+
             return value.ToString();
         }
 
@@ -54,13 +64,24 @@ public static class ObjectConversionExtensions
     /// <param name="value">
     /// Object to serialize.
     /// </param>
+    /// <param name="ignoreNull">Determinate whether to ignore null values when serializing.</param>
     /// <returns>
     /// Object in JSON format.
     /// </returns>
-    public static string ToJSON(this object value)
+    public static string ToJson(this object value, 
+        bool ignoreNull = true)
     {
         if (value.IsNotNull())
         {
+            if (ignoreNull)
+            {
+                return JsonSerializer.Serialize(value,
+                    new JsonSerializerOptions 
+                    { 
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull 
+                    });
+            }
+
             return JsonSerializer.Serialize(value);
         }
 
@@ -68,29 +89,44 @@ public static class ObjectConversionExtensions
     }
 
     /// <summary>
-    /// Map an object to its DTO version.
+    /// Serialize an object into JSON format ignoring null values.
     /// </summary>
-    /// <typeparam name="T">
-    /// Object to return.
-    /// </typeparam>
-    /// <param name="objectToMap">
-    /// Object to map.
+    /// <param name="value">
+    /// Object to serialize.
     /// </param>
     /// <returns>
-    /// Object in its DTO version.
+    /// Object in JSON format.
     /// </returns>
-    public static T Map<T>(this object objectToMap)
+    public static string ToJson(this object value)
     {
-        if (objectToMap.IsNotNull())
-        {
-            return JsonSerializer.Deserialize<T>(objectToMap.ToJSON());
-        }
-
-        return default(T);
+        return value.ToJson(ignoreNull: true);
     }
 
     /// <summary>
-    /// Sugar coding for mapping an object to its DTO version.
+    /// Serialize an object into JSON format using the specified serializer options.
+    /// </summary>
+    /// <param name="value">
+    /// Object to serialize.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object in JSON format.
+    /// </returns>
+    public static string ToJson(this object value,
+        JsonSerializerOptions options)
+    {
+        if (value.IsNotNull())
+        {
+            return JsonSerializer.Serialize(value, options);
+        }
+
+        return string.Empty;
+    } 
+
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version using a cached compiled property mapper.
     /// </summary>
     /// <typeparam name="T">
     /// Object to return.
@@ -101,8 +137,46 @@ public static class ObjectConversionExtensions
     /// <returns>
     /// Object in its DTO version.
     /// </returns>
-    public static T ToDTO<T>(this object objectToDTO)
+    public static T? ToDto<T>(this object? objectToDTO)
     {
         return objectToDTO.Map<T>();
+    }
+
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version using JSON serialization.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToDTO">
+    /// Object to map.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T? ToDtoUsingJson<T>(this object? objectToDTO)
+    {
+        return objectToDTO.MapUsingJson<T>();
+    }
+
+    /// <summary>
+    /// Sugar coding for mapping an object to its DTO version using JSON serialization and the specified serializer options.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to return.
+    /// </typeparam>
+    /// <param name="objectToDTO">
+    /// Object to map.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object in its DTO version.
+    /// </returns>
+    public static T? ToDto<T>(this object? objectToDTO,
+        JsonSerializerOptions options)
+    {
+        return objectToDTO.Map<T>(options);
     }
 }

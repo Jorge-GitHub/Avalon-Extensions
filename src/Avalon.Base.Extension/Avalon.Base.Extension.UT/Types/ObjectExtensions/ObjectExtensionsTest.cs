@@ -17,7 +17,7 @@ public class ObjectExtensionsTest
             Name = "Test",
             Description = "Simple Test"
         };
-        string json = test.ToJSON();
+        string json = test.ToJson();
         Assert.IsTrue(json.IsNotNullOrEmpty());
     }
 
@@ -32,7 +32,7 @@ public class ObjectExtensionsTest
             Description = "User tester",
             Password = "Password1"
         };
-        UserDTO dto = user.ToDTO<UserDTO>();
+        UserDTO dto = user.ToDto<UserDTO>();
 
         Assert.IsTrue(dto.Name.IsNotNullOrEmpty());
     }

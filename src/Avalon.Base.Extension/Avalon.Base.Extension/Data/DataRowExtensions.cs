@@ -1,8 +1,8 @@
-﻿using Avalon.Base.Extension.Internal.Helpers.Data;
+﻿using Avalon.Base.Extension.Collections;
+using Avalon.Base.Extension.Internal.Helpers.Data;
 using Avalon.Base.Extension.Types;
 using System.Data;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Avalon.Base.Extension.Data;
 
@@ -25,6 +25,54 @@ public static class DataRowExtensions
     public static bool HasRecords(this DataRowCollection rows)
     {
         return rows != null && rows.Count > 0;
+    }
+
+    /// <summary>
+    /// Converts a <see cref="DataRowCollection"/> to a <see cref="List{DataRow}"/>.
+    /// </summary>
+    /// <param name="rowCollection">The collection of <see cref="DataRow"/> to be converted.</param>
+    /// <returns>
+    /// A <see cref="List{DataRow}"/> containing all the rows from the <paramref name="rowCollection"/>.
+    /// If the collection is empty or null, an empty <see cref="List{DataRow}"/> is returned.
+    /// </returns>
+    /// <remarks>
+    /// This method uses LINQ to cast the <see cref="DataRowCollection"/> into a <see cref="List{DataRow}"/>
+    /// if the collection contains records. Otherwise, it returns an empty list.
+    /// </remarks>
+    public static List<DataRow> ToRows(this DataRowCollection rowCollection)
+    {
+        if (rowCollection.HasRecords())
+        {
+            return rowCollection.Cast<DataRow>().ToList();
+        }
+
+        return new List<DataRow>();
+    }
+
+    /// <summary>
+    /// Convert a data row list into objects.
+    /// </summary>
+    /// <typeparam name="T">
+    ///  Object type to convert into.
+    /// </typeparam>
+    /// <param name="rows">
+    /// Rows to convert to.
+    /// </param>
+    /// <returns>
+    /// List of objects.
+    /// </returns>
+    public static List<T> ToObjects<T>(this List<DataRow> rows)
+    {
+        var list = new List<T>();
+        if(rows.HasElements())
+        {
+            foreach(DataRow row in rows)
+            {
+                list.Add(row.ToObject<T>());
+            }
+        }
+
+        return list;
     }
 
     /// <summary>
@@ -158,5 +206,21 @@ public static class DataRowExtensions
                 }
             }
         }
+    }
+
+    public static bool Contains(this DataRow row, IReadOnlyCollection<string> columnNames)
+    {
+        if (columnNames.HasElements())
+        {
+            foreach (string columnName in columnNames)
+            {
+                if (row.Table.Columns.Contains(columnName))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
@@ -47,6 +45,26 @@ public static class StringEncryptionExtensions
             Byte[] b = Convert.FromBase64String(value);
 
             return ASCIIEncoding.ASCII.GetString(b);
+        }
+
+        return string.Empty;
+    }
+
+    public static string SafeEncrypt(this string text, string key)
+    {
+        if (text.IsNotNullOrEmpty())
+        {
+            return text.Encrypt(key);
+        }
+
+        return string.Empty;
+    }
+
+    public static string SafeDecrypt(this string text, string key)
+    {
+        if (text.IsNotNullOrEmpty())
+        {
+            return text.Decrypt(key);
         }
 
         return string.Empty;

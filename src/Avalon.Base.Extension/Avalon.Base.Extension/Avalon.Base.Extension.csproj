@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>avalon-icon.ico</ApplicationIcon>
@@ -22,6 +22,8 @@
     <PackageReleaseNotes>I love C# extensions. This is a library that contains some of the extensions I wrote during my career for my personal projects. I hope more people will join and add more extensions that we can share.</PackageReleaseNotes>
     <AssemblyName>Avalon.Base.Extension</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!-- Its folder in Avalon.Libraries: the build publishes it there (Directory.Build.props). -->
+    <AvalonLibraryFolder>Base</AvalonLibraryFolder>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +42,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.3" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <!-- Microsoft.Data.SqlClient brings 9.0.18, vulnerable to GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7. -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)*&quot; &quot;C:\Repos\Libraries\Avalon\OpenSource\&quot; /Y&#xD;&#xA;xcopy &quot;C:\Repos\OpenSource\Avalon-Extensions\Ai\specs\*&quot; &quot;C:\Repos\Libraries\specs\docs\OpenSource\Avalon.Base.Extension\&quot; /E /I /Y" />
+  </Target>
 
 </Project>

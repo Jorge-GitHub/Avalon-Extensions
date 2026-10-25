@@ -15,11 +15,11 @@ public class StringTest
         string value = "Hello World";
         List<string> values = value.SplitByBlocks(2);
         int lenght = value.SplitByBlocks(2).Count;
-        Assert.AreEqual(lenght, 6);
+        Assert.AreEqual(6, lenght);
         lenght = string.Empty.SplitByBlocks(2).Count;
-        Assert.AreEqual(lenght, 0);
+        Assert.AreEqual(0, lenght);
         lenght = value.SplitByBlocks(4).Count;
-        Assert.AreEqual(lenght, 3);
+        Assert.AreEqual(3, lenght);
     }
 
     [TestMethod]
@@ -42,15 +42,46 @@ public class StringTest
     [TestMethod]
     public void TestEmail()
     {
-        Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
-        Assert.IsFalse("jamesbond".IsAValidEmail());
+        string[] validEmails =
+        {
+            "jamesbond@gmail.com",
+            "jane@about.me",
+            "jane@archive.history",
+            "person@example.technology",
+            "first.last+tag@sub.example.solutions"
+        };
+
+        foreach (string email in validEmails)
+        {
+            Assert.IsTrue(email.IsAValidEmail(), $"{email} should be valid.");
+        }
     }
 
     [TestMethod]
     public void TestNotValidEmail()
     {
+        string?[] invalidEmails =
+        {
+            null,
+            string.Empty,
+            " ",
+            "jamesbond",
+            "a@b",
+            "name@example",
+            "name@example.com ",
+            " name@example.com",
+            "name@@example.com",
+            "name@example..com",
+            "first last@example.com"
+        };
+
         Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
-        Assert.IsTrue("jamesbond".IsNotAValidEmail());
+
+        foreach (string? email in invalidEmails)
+        {
+            Assert.IsFalse(email.IsAValidEmail(), $"{email} should be invalid.");
+            Assert.IsTrue(email.IsNotAValidEmail(), $"{email} should not be valid.");
+        }
     }
 
     /// <summary>
@@ -63,5 +94,26 @@ public class StringTest
         testValue = testValue.RemoveBetweenTags("*|FirstText|*", "*|SecondText|*");
         Assert.IsFalse(testValue.Contains("Content To Remove"));
         Assert.IsTrue(testValue.Contains("*|FirstText|**|SecondText|*"));
+    }
+
+    /// <summary>
+    /// Test Sanitize extension.
+    /// </summary>
+    [TestMethod]
+    public void TestSanitize()
+    {
+        string value = "Hello@";
+        string cleanValue = value.Sanitize();
+        Assert.IsTrue(cleanValue.Equals("Hello"));
+    }
+
+    [TestMethod]
+    public void ContainsOrdinalIgnoreCase_WithNullAndDifferentCasing_ReturnsExpectedValue()
+    {
+        string? nullValue = null;
+
+        Assert.IsFalse(nullValue.ContainsOrdinalIgnoreCase("anything"));
+        Assert.IsTrue("Assistant Completed".ContainsOrdinalIgnoreCase("completed"));
+        Assert.IsFalse("Assistant Completed".ContainsOrdinalIgnoreCase("failed"));
     }
 }

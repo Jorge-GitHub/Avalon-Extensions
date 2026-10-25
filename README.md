@@ -1,94 +1,125 @@
-# Avalon-Extensions
+# Avalon Extensions
 
-## Extensions for .NET
+Avalon Extensions is a collection of C# extension methods for common .NET development tasks. It brings together reusable helpers developed for personal projects, with contributions from the community welcome.
 
-I love C# [extensions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods). 
-This is a library that contains some of the extensions I wrote during my career for my personal projects. 
-I hope more people will join and add more extensions that we can share.
+[Wiki](https://github.com/Jorge-GitHub/Avalon-Extensions/wiki) | [Report an issue](https://github.com/Jorge-GitHub/Avalon-Extensions/issues)
 
+## What's included
 
-### Convert an Object into JSON
+| Area | Helpers |
+| --- | --- |
+| Strings | Formatting, email format checks, cleanup, and type conversion. |
+| Dates and times | Calendar checks, month boundaries, and DateTime and DateTimeOffset conversions. |
+| Numbers and booleans | Conversion, currency formatting, and readability helpers. |
+| Collections | Helpers for arrays, lists, dictionaries, and enumerable sequences. |
+| Objects and JSON | Serialization, deserialization, copying, mapping, and JSON property access. |
+| Data | Helpers for DataSet, DataTable, DataRow, and SQL parameters. |
+| Reflection | Helpers for inspecting types and properties. |
+| Files and text | File, directory, and StringBuilder utilities. |
+| HTTP | Request content, response reading, and download helpers. |
 
-The below code will convert an object into a JSON format string.
+## Getting started
 
-```cs
-    public void TestToJSON()
-    {
-        TestClass test = new TestClass()
-        {
-            Name = "Test",
-            Description = "Simple Test"
-        };
-        string json = test.ToJSON();
-    }
+The current source targets **.NET 10**. Install the .NET 10 SDK to build the library or run its tests.
 
-    internal class TestClass
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-    }
+Clone this repository, then run the following command from your application's project directory, replacing `<path-to-Avalon-Extensions>` with the checkout location:
+
+```shell
+dotnet add reference "<path-to-Avalon-Extensions>/src/Avalon.Base.Extension/Avalon.Base.Extension/Avalon.Base.Extension.csproj"
 ```
 
-### Prevent SQL Injection
+Your application must target a framework compatible with the library's `net10.0` target. The package ID configured in the project is `net.AvalonTeam.Base.Extensions`.
 
-The below code will remove any SQL injection on a list of parameters.
+Import the namespaces containing the extensions you need. The examples below include their required imports.
 
-```cs
-    public void TestToSafeSQL()
-    {
-        List<SqlParameter> parameters = new List<SqlParameter>();
-        parameters.Add(new SqlParameter("@Paramater1", -1));
-        parameters.Add(new SqlParameter("@Paramater2", "Car"));
-        parameters.ToSafeSQL();
-        Assert.IsTrue(parameters.Count == 2);
-    }
-```
+## Usage examples
 
-### Check if the Email is Valid or Not.
+### Serialize an object to JSON
 
-the below code checks if a string is a valid email or not.
+`ToJson` uses System.Text.Json and omits null properties by default. Pass `ignoreNull: false` to include them.
 
-```cs
-    public void TestIsAValidEmail()
-    {
-        Assert.IsTrue("jamesbond@gmail.com".IsAValidEmail());
-        Assert.IsFalse("jamesbond".IsAValidEmail());
+```csharp
+using Avalon.Base.Extension.Types;
 
-        Assert.IsFalse("jamesbond@gmail.com".IsNotAValidEmail());
-        Assert.IsTrue("jamesbond".IsNotAValidEmail());
-    }
-```
-
-### StringBuilder LastIndexOf
-
-StringBuilder does not have LastIndexOf method, so I add it one.
-
-```cs
-    public void TestLastIndexOf()
-    {
-        StringBuilder testValue = new StringBuilder("Hello World!");
-        Assert.IsTrue(testValue.LastIndexOf("Hello") > -1);
-        Assert.IsTrue(testValue.LastIndexOf("Bye") == -1);
-    }
-```
-
-### DateTime Extensions
-
-The following code demonstrates basic usage of Avalon-Extensions.
-
-```cs
-using System;
-using Avalon.Extension.Types;
-public void TestAvalonExtensions()
+var item = new
 {
-    DateTime now = DateTime.Now;
-    // Returns a flag that determinates whether the datetime is today or not.
-    bool isToday = now.IsToday(); 
-    // Returns the last day of the month from a provider date.
-    DateTime lastDayOTheMonth = now.LastDayOfMonth(); 
-    // Returns a flag that determinates whether the DateTime year is a leap year or not.
-    bool isLeapYear = now.IsLeapYear();
-}
+    Name = "Test",
+    Description = "Simple Test"
+};
+
+string json = item.ToJson();
+// {"Name":"Test","Description":"Simple Test"}
 ```
 
-**Note:** I will document all of the extensions on wiki as soon as I have some free time. Check the code for more extensions.
+### Format and convert strings
+
+```csharp
+using Avalon.Base.Extension.Types;
+using Avalon.Base.Extension.Types.StringExtensions;
+
+string padded = "42".AppendFront("0", 5); // "00042"
+int count = "not a number".ToInteger(0);  // 0
+
+bool valid = "name@example.com".IsAValidEmail(); // true
+bool invalid = "not-an-email".IsNotAValidEmail(); // true
+```
+
+The email helpers check address format; they do not verify that a mailbox exists.
+
+### Work with dates
+
+```csharp
+using System;
+using Avalon.Base.Extension.Types.DateTimeExtensions;
+
+DateTime date = new DateTime(2026, 5, 17);
+
+DateTime firstDay = date.FirstDayOfMonth(); // 2026-05-01
+DateTime lastDay = date.LastDayOfMonth();   // 2026-05-31
+bool leapYear = date.IsLeapYear();          // false
+bool isToday = DateTime.Today.IsToday();    // true
+```
+
+### Search a StringBuilder
+
+```csharp
+using System.Text;
+using Avalon.Base.Extension.System.Text;
+
+var text = new StringBuilder("Hello World!");
+
+int found = text.LastIndexOf("World"); // 6
+int missing = text.LastIndexOf("Bye"); // -1
+```
+
+## Documentation
+
+Visit the [project wiki](https://github.com/Jorge-GitHub/Avalon-Extensions/wiki) for documentation as it is added. For the current API and more usage examples, explore:
+
+- [Library source](https://github.com/Jorge-GitHub/Avalon-Extensions/tree/HEAD/src/Avalon.Base.Extension/Avalon.Base.Extension)
+- [Unit tests](https://github.com/Jorge-GitHub/Avalon-Extensions/tree/HEAD/src/Avalon.Base.Extension/Avalon.Base.Extension.UT)
+
+## Building and testing
+
+The solution is located at `src/Avalon.Base.Extension/Avalon.Base.Extension.sln`.
+
+The library project currently includes Windows post-build copy commands targeting `C:\Repos\Libraries`. Before building on another machine, review and adapt those commands in `Avalon.Base.Extension.csproj` for your environment.
+
+From the repository root:
+
+```shell
+dotnet build src/Avalon.Base.Extension/Avalon.Base.Extension.sln
+dotnet test src/Avalon.Base.Extension/Avalon.Base.Extension.sln
+```
+
+## SQL parameter helpers
+
+`ToSafeSQL()` currently leaves parameter values unchanged. It does not sanitize input or provide SQL injection protection. Use parameterized commands with bound values rather than constructing SQL from user input.
+
+## Contributing
+
+Have a useful extension, an improvement, or a documentation correction? Contributions are welcome.
+
+- [Open an issue](https://github.com/Jorge-GitHub/Avalon-Extensions/issues) to report a bug or suggest an addition.
+- Submit a pull request describing the change and its intended behavior.
+- Include relevant unit tests when adding or changing extension behavior.

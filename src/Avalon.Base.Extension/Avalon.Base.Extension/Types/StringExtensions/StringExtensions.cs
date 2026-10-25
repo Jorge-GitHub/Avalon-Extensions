@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace Avalon.Base.Extension.Types.StringExtensions;
 
@@ -121,13 +120,19 @@ public static class StringExtensions
 	/// <returns>
 	/// Flag that determinate whether a string is a valid email or not.
 	/// </returns>
-	public static bool IsAValidEmail(this string email)
+	public static bool IsAValidEmail(this string? email)
     {
-        if (email.IsNotNullOrEmpty())
+        if (string.IsNullOrWhiteSpace(email) || email != email.Trim())
         {
-			return new EmailAddressAttribute().IsValid(email);
+            return false;
 		}
-        return false;
+
+        if (!MailAddress.TryCreate(email, out MailAddress? address))
+        {
+            return false;
+        }
+
+        return address.Address == email && HasValidEmailHost(address.Host);
     }
 
 	/// <summary>
@@ -139,10 +144,30 @@ public static class StringExtensions
 	/// <returns>
 	/// Flag that determinate whether a string is not a valid email or not.
 	/// </returns>
-	public static bool IsNotAValidEmail(this string email)
+	public static bool IsNotAValidEmail(this string? email)
 	{
 		return !email.IsAValidEmail();
 	}
+
+    private static bool HasValidEmailHost(string host)
+    {
+        string[] labels = host.Split('.');
+
+        if (labels.Length < 2)
+        {
+            return false;
+        }
+
+        foreach (string label in labels)
+        {
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// Remove the text between two strings.
@@ -176,5 +201,57 @@ public static class StringExtensions
         }
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Extension method that sanitizes the given string by replacing all non-alphanumeric characters
+    /// (including spaces) with a specified replacement string. The default replacement is an empty string, 
+    /// which effectively removes the special characters.
+    /// </summary>
+    /// <param name="value">The string to be sanitized.</param>
+    /// <param name="replacement">The string to replace all non-alphanumeric characters with. 
+    /// The default is an empty string, which removes the special characters.</param>
+    /// <returns>A sanitized string where all non-alphanumeric characters and spaces are replaced with the specified replacement string.</returns>
+    public static string Sanitize(this string value, string replacement = "")
+    {
+        if (value.IsNotNullOrEmpty())
+        {
+            return Regex.Replace(value, @"[^a-zA-Z0-9]", replacement);
+        }
+
+        return value;
+    }
+
+    public static string NormalizeValue(this string? value,
+        string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
+            ? value!.Trim() : defaultValue;
+    }
+
+    public static string NormalizeToLowerValue(this string? value,
+        string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
+            ? value!.Trim().ToLowerInvariant() : defaultValue;
+    }
+
+    public static string NormalizeUri(this string? value, string defaultValue = "")
+    {
+        return value!.IsNotNullOrEmpty()
+            ? value!.Trim().TrimEnd('/').ToLowerInvariant()
+            : defaultValue;
+    }
+
+    public static string GetOrCreateNewId(this string? id, bool removeHyphens = false)
+    {
+        if(removeHyphens)
+        {
+            return string.IsNullOrWhiteSpace(id)
+                ? Guid.NewGuid().ToString("N") : id.Replace("-", "");
+        }
+
+        return string.IsNullOrWhiteSpace(id)
+            ? Guid.NewGuid().ToString() : id;
     }
 }

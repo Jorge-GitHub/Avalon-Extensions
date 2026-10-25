@@ -33,6 +33,29 @@ public static class DataSetExtensions
         return false;
     }
 
+    public static bool HasData(this DataSet? data, int tableIndex)
+    {
+        if (data is null ||
+            data.Tables is null ||
+            tableIndex < 0 ||
+            data.Tables.Count <= tableIndex)
+        {
+            return false;
+        }
+
+        return data.Tables[tableIndex].HasData();
+    }
+
+    public static bool IsEmpty(this DataSet data)
+    {
+        return !data.HasData();
+    }
+
+    public static bool IsEmpty(this DataSet? data, int tableIndex)
+    {
+        return !data.HasData(tableIndex);
+    }
+
     /// <summary>
     /// Get a DataTable by table's name.
     /// </summary>
@@ -103,6 +126,46 @@ public static class DataSetExtensions
         return string.Empty;
     }
 
+    public static string GetFirstValueOnTheFirstTable(this DataSet dataSet)
+    {
+        if (dataSet.HasData())
+        {
+            return dataSet.Tables[0].Rows[0][0].ToSafeString();
+        }
+
+        return string.Empty;
+    }
+
+    public static bool GetFirstValueOnTheFirstTableAsBoolean(this DataSet dataSet,
+        bool defaultValue = false)
+    {
+        string value = dataSet.GetFirstValueOnTheFirstTable();
+        if (bool.TryParse(value, out bool result))
+        {
+            return result;
+        }
+
+        if(value.Equals("1", StringComparison.OrdinalIgnoreCase)
+            || value.Equals("t", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return value.ToBoolean(defaultValue);
+    }
+
+    public static long GetFirstValueOnTheFirstTableAsLong(this DataSet dataSet,
+        long defaultValue = 0)
+    {
+        string value = dataSet.GetFirstValueOnTheFirstTable();
+        if (long.TryParse(value, out long result))
+        {
+            return result;
+        }
+
+        return defaultValue;
+    }
+
     /// <summary>
     /// Get the first value on the first data table.
     /// Similar to calling data.Rows[0][0].
@@ -145,5 +208,26 @@ public static class DataSetExtensions
         }
 
         return 0;
+    }
+
+    public static List<T> ToObjects<T>(this DataSet data)
+    {
+        List<T> objects = new List<T>();
+        if (data.HasData())
+        {
+            return data.Tables[0].ToObjects<T>().ToList();
+        }
+
+        return objects;
+    }
+
+    public static T ToObjectFromFirstUserFromDataSet<T>(this DataSet data)
+    {
+        if (data.HasData())
+        {
+            return data.Tables[0].ToObjectFromFirstUserFromDataTable<T>();
+        }
+
+        return default!;
     }
 }

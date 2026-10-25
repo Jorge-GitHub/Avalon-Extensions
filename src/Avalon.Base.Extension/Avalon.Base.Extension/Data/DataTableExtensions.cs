@@ -26,6 +26,11 @@ public static class DataTableExtensions
         return false;
     }
 
+    public static bool IsEmpty(this DataTable table)
+    {
+        return !table.HasData();
+    }
+
     /// <summary>
     /// Convert a data table rows into a list of objects.
     /// </summary>
@@ -50,5 +55,15 @@ public static class DataTableExtensions
         }
 
         return objects;
+    }
+
+    public static T ToObjectFromFirstUserFromDataTable<T>(this DataTable table)
+    {
+        if (table.HasData())
+        {
+            return table.Rows[0].ToObject<T>();
+        }
+
+        return default!;
     }
 }

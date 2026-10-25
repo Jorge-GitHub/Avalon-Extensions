@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 
 namespace Avalon.Base.Extension.Types;
@@ -75,6 +74,16 @@ public static class StringConversionExtensions
         return defaultValue;
     }
 
+    public static int? ToIntegerOrDefault(this string value, int? defaultValue)
+    {
+        if (value.IsAnInteger())
+        {
+            return int.Parse(value);
+        }
+
+        return defaultValue;
+    }
+
     /// <summary>
     /// Convert a string formated as a currency into a decimal.
     /// </summary>
@@ -110,14 +119,60 @@ public static class StringConversionExtensions
     /// <returns>
     /// String as a decimal.
     /// </returns>
-    public static decimal ToDecimal(this string value, decimal defaultValue)
+    public static decimal ToDecimal(this string value, decimal defaultValue = 0m)
     {
         if (value.IsADecimal())
         {
-            return decimal.Parse(value);
+            if (decimal.TryParse(
+                value,
+                NumberStyles.Number,
+                CultureInfo.InvariantCulture,
+                out decimal result))
+            {
+                return result;
+            }
         }
 
         return defaultValue;
+    }
+
+    public static decimal? ToDecimalOrDefault(this string value, decimal? defaultValue)
+    {
+        if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parsedValue))
+        {
+            return parsedValue;
+        }
+
+        return null;
+    }
+
+    public static long ToLong(this string value, long defaultValue = 0)
+    {
+        if (long.TryParse(value, out long result))
+        {
+            return result;
+        }
+
+        return defaultValue;
+    }
+
+    /// <summary>
+    /// Format the string into the a currency.
+    /// </summary>
+    /// <param name="value">
+    /// Value to format.
+    /// </param>
+    /// <param name="format">
+    /// Currency format.
+    /// Default is "C2".
+    /// </param>
+    /// <returns>
+    /// String as formated as a currency.
+    /// </returns>
+    public static string FormatToCurrency(this string value, 
+        string format = "C2")
+    {
+        return value.FormatToCurrency(format, CultureInfo.CurrentCulture);
     }
 
     /// <summary>
@@ -137,18 +192,17 @@ public static class StringConversionExtensions
     /// <returns>
     /// String as formated as a currency.
     /// </returns>
-    public static string FormatToCurrency(this string value, string format = "C2", 
-        CultureInfo culture = null)
+    public static string FormatToCurrency(this string value, 
+        string? format, CultureInfo culture)
     {
-        if (value.IsNotNullOrEmpty())
+        if(format!.IsNullOrEmpty())
         {
-            if (culture == null)
-            {
-                culture = CultureInfo.CurrentCulture;
-            }
+            format = "C2";
         }
 
-        return value.RemoveNoneNumericValues().ToDecimal(0).ToString(format, culture);
+        return value.RemoveNoneNumericValues()
+            .ToDecimal()
+            .ToString(format, culture);
     }
 
     /// <summary>
@@ -225,8 +279,85 @@ public static class StringConversionExtensions
     /// <returns>
     /// Object from the json string.
     /// </returns>
-    public static T ToObject<T>(this string json)
+    public static T ToObject<T>(this string json,
+        bool propertyNameCaseInsensitive = true) where T : class
     {
-        return JsonSerializer.Deserialize<T>(json);
+        if (json.IsNotNullOrEmpty())
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = propertyNameCaseInsensitive
+            };
+
+            return JsonSerializer.Deserialize<T>(json, options);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Convert a JSON string into an object using the specified serializer options.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to convert to.
+    /// </typeparam>
+    /// <param name="json">
+    /// Object in JSON format.
+    /// </param>
+    /// <param name="options">
+    /// Serializer options.
+    /// </param>
+    /// <returns>
+    /// Object from the json string.
+    /// </returns>
+    public static T? ToObject<T>(this string json,
+        JsonSerializerOptions options) where T : class
+    {
+        if (json.IsNotNullOrEmpty())
+        {
+            return JsonSerializer.Deserialize<T>(json, options);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Convert a string into json in a safe way.
+    /// </summary>
+    /// <typeparam name="T">
+    /// Object to convert to.
+    /// </typeparam>
+    /// <param name="json">
+    /// Object in JSON format.
+    /// </param>
+    /// <returns>
+    /// Object from the json string.
+    /// </returns>
+    public static T? ToObjectSafe<T>(this string json) where T : class
+    {
+        try
+        {
+            if (json.IsNotNullOrEmpty())
+            {
+                return json.ToObject<T>();
+            }
+        }
+        catch { }
+
+        return null;
+    }
+
+    public static T? ToObjectSafe<T>(this string json, JsonSerializerOptions options) where T : class
+    {
+        try
+        {
+            if (json.IsNotNullOrEmpty())
+            {
+                return json.ToObject<T>(options);
+            }
+        }
+        catch { }
+
+        return null;
     }
 }

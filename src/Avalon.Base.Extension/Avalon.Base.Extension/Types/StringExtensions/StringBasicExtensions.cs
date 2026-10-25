@@ -93,6 +93,7 @@ public static class StringBasicExtensions
 
             return decimal.TryParse(value, out result);
         }
+
         return false;
     }
 
@@ -142,13 +143,22 @@ public static class StringBasicExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// A boolean flag that determines whether to remove line breaks (`\r` and `\n`).
+    /// If set to <c>true</c>, line breaks are removed from the string. If set to <c>false</c> (default), no modification is made to line breaks.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToEmptyStringIfNull(this string value)
+    public static string ToEmptyStringIfNull(this string value, bool removeBreaks = false)
     {
         if (value.IsNotNullOrEmpty())
         {
+            if (removeBreaks)
+            {
+                value = value.Replace("\r", "").Replace("\n", "");
+            }
+
             return value;
         }
 
@@ -161,12 +171,44 @@ public static class StringBasicExtensions
     /// <param name="value">
     /// value to convert to an empty string if is null.
     /// </param>
+    /// <param name="removeBreaks">
+    /// A boolean flag that determines whether to remove line breaks (`\r` and `\n`).
+    /// If set to <c>true</c>, line breaks are removed from the string. If set to <c>false</c> (default), no modification is made to line breaks.
+    /// </param>
     /// <returns>
     /// Empty string if the string is null.
     /// </returns>
-    public static string ToSafeString(this string value)
+    public static string ToSafeString(this string value, bool removeBreaks = false)
     {
-        return value.ToEmptyStringIfNull();
+        return value.ToEmptyStringIfNull(removeBreaks);
+    }
+
+    /// <summary>
+    /// Safely trims a string and optionally removes line breaks.
+    /// </summary>
+    /// <param name="value">The input string to be trimmed.</param>
+    /// <param name="removeBreaks">If true, removes line breaks from the string.</param>
+    /// <returns>A trimmed string with optional line breaks removed. Returns an empty string if the input is null.</returns>
+    public static string ToSafeTrim(this string value, 
+        bool removeBreaks = false)
+    {
+        return value.ToSafeString(removeBreaks).Trim();
+    }
+
+    public static string ToTrimmedOrDefault(this string value,
+        string defaultValue = "", bool removeBreaks = false)
+    {
+        if (value.IsNullOrEmpty())
+        {
+            return defaultValue!;
+        }
+
+        return value.ToSafeTrim(removeBreaks);
+    }
+
+    public static string? ToTrimOrNull(this string? value)
+    {
+        return value!.IsNullOrEmpty() ? null : value!.Trim();
     }
 
     /// <summary>
@@ -557,5 +599,15 @@ public static class StringBasicExtensions
         }
 
         return string.Empty;
+    }
+
+    public static bool EqualsIgnoreCase(this string? value, string? other)
+    {
+        return string.Equals(value, other, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static bool ContainsOrdinalIgnoreCase(this string? value, string candidate)
+    {
+        return (value ?? string.Empty).Contains(candidate, StringComparison.OrdinalIgnoreCase);
     }
 }

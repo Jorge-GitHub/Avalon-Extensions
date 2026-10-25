@@ -36,4 +36,78 @@ public static class DirectoryExtensions
             new DirectoryInfo(directoryPath).Empty();
         }
     }
+
+    /// <summary>
+    /// Copy a directory and everything beneath it.
+    /// </summary>
+    /// <param name="directory">
+    /// Directory to copy.
+    /// </param>
+    /// <param name="destinationPath">
+    /// Path to copy into. It is created when it does not exist.
+    /// </param>
+    /// <param name="overwrite">
+    /// Flag that determines whether existing files are replaced.
+    /// </param>
+    /// <returns>
+    /// The number of files copied.
+    /// </returns>
+    public static int CopyTo(this DirectoryInfo directory,
+        string destinationPath, bool overwrite = false)
+    {
+        Directory.CreateDirectory(destinationPath);
+
+        int copied = 0;
+
+        foreach (FileInfo file in directory.GetFiles())
+        {
+            file.CopyTo(Path.Combine(destinationPath, file.Name), overwrite);
+            copied++;
+        }
+
+        foreach (DirectoryInfo subDirectory in directory.GetDirectories())
+        {
+            copied += subDirectory.CopyTo(
+                Path.Combine(destinationPath, subDirectory.Name), overwrite);
+        }
+
+        return copied;
+    }
+
+    public static string ResolveFolderPath(this string folder)
+    {
+        if (string.IsNullOrWhiteSpace(folder))
+        {
+            return AppContext.BaseDirectory;
+        }
+
+        if (Path.IsPathFullyQualified(folder))
+        {
+            return folder;
+        }
+
+        return Path.GetFullPath(folder, AppContext.BaseDirectory);
+    }
+
+    public static void DeleteEmptyParentDirectory(this string filePath, string rootPath)
+    {
+        string? folderPath = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrWhiteSpace(folderPath))
+        {
+            string absoluteRootPath = Path.GetFullPath(rootPath).TrimEnd(
+                Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string absoluteFolderPath = Path.GetFullPath(folderPath).TrimEnd(
+                Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            // The root itself is kept: only folders below it are removed.
+            if (absoluteFolderPath.IsInsideFolder(absoluteRootPath) &&
+                !absoluteFolderPath.Equals(absoluteRootPath,
+                    StringComparison.OrdinalIgnoreCase) &&
+                Directory.Exists(absoluteFolderPath) &&
+                !Directory.EnumerateFileSystemEntries(absoluteFolderPath).Any())
+            {
+                Directory.Delete(absoluteFolderPath);
+            }
+        }
+    }
 }
